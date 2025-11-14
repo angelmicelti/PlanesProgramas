@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programas Educativos - Junta de Andalucía</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    <style>
+        :root {
+            --primary: #0055a4;
+            --secondary: #009246;
+            --accent: #ff6600;
+            --ayto-color: #9c27b0;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --gray: #6c757d;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --config-bg: #2c3e50;
+            --danger: #dc3545;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #f5f7fa; color: var(--dark); line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+
+        header { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; padding: 20px 0; box-shadow: var(--shadow); margin-bottom: 30px; }
+        .header-content { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+        .logo { display: flex; align-items: center; gap: 15px; }
+        .logo i { font-size: 2.5rem; }
+        .logo h1 { font-size: 1.8rem; font-weight: 700; }
+        .logo-subtitle { font-size: 1rem; opacity: 0.9; }
+        .course-subtitle { font-size: 0.9rem; opacity: 0.8; margin-top: 5px; font-weight: 500; }
+
+        nav { display: flex; gap: 10px; margin-top: 15px; width: 100%; }
+        .nav-btn { background: rgba(255, 255, 255, 0.2); border: none; color: white; padding: 12px 20px; border-radius: 50px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 8px; flex: 1; justify-content: center; text-decoration: none; }
+        .nav-btn:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-2px); }
+        .nav-btn.active { background: white; color: var(--primary); }
+
+        .page { display: none; animation: fadeIn 0.5s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .page-title { color: var(--primary); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--primary); display: flex; align-items: center; gap: 10px; }
+        .back-btn { background: var(--gray); color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: var(--transition); margin-bottom: 20px; }
+        .back-btn:hover { background: var(--dark); }
+
+        .programs-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .program-card { background: white; border-radius: 10px; padding: 20px; box-shadow: var(--shadow); transition: var(--transition); position: relative; overflow: hidden; }
+        .program-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1); }
+        .program-card.type-a { border-left: 4px solid var(--primary); background-color: rgba(0, 85, 164, 0.05); }
+        .program-card.type-b { border-left: 4px solid var(--secondary); background-color: rgba(0, 146, 70, 0.05); }
+        .program-card.type-c { border-left: 4px solid var(--accent); background-color: rgba(255, 102, 0, 0.05); }
+        .program-card.type-ayto { border-left: 4px solid var(--ayto-color); background-color: rgba(156, 39, 176, 0.05); }
+
+        .program-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .program-name { font-weight: 600; color: var(--primary); font-size: 1.1rem; margin-bottom: 5px; }
+        .program-link { color: var(--secondary); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
+        .program-link:hover { text-decoration: underline; }
+
+        /* Etiqueta de coordinación */
+        .coord-label { margin-top: 8px; font-size: 0.95rem; color: var(--dark); }
+        .coord-label .label { color: var(--primary); font-weight: 600; }
+
+        .program-check { display: flex; align-items: center; gap: 10px; margin-top: 10px; }
+        .check-label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .check-label input { width: 18px; height: 18px; }
+
+        .coordinator-btn { background: var(--secondary); color: white; border: none; padding: 8px 15px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; transition: var(--transition); margin-top: 10px; display: none; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+        .coordinator-btn.reassign { background: #1f8f52; }
+        .coordinator-btn:hover { opacity: 0.95; transform: translateY(-1px); }
+
+        .project-btn { background: var(--ayto-color); color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 0.9rem; transition: var(--transition); margin-top: 10px; }
+        .project-btn:hover { background: #7b1fa2; }
+
+        .collapsible { margin: 30px 0; background: white; border-radius: 10px; box-shadow: var(--shadow); overflow: hidden; }
+        .collapsible-header { padding: 15px 20px; background: var(--config-bg); color: white; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 600; }
+        .collapsible-content { padding: 0 20px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .collapsible.active .collapsible-content { max-height: 1000px; padding: 20px; }
+
+        .action-buttons { display: flex; gap: 15px; flex-wrap: wrap; margin: 20px 0; }
+        .action-btn { padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; transition: var(--transition); display: flex; align-items: center; gap: 8px; }
+        .export-btn { background: var(--primary); color: white; }
+        .import-btn { background: var(--secondary); color: white; }
+        .pdf-btn { background: #e74c3c; color: white; }
+        .html-btn { background: #3498db; color: white; }
+        .danger-btn { background: var(--danger); color: white; }
+        .action-btn:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        .github-section { margin-top: 20px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 1rem; }
+        .teacher-select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; background-color: white; }
+
+        .gist-list { margin-top: 15px; max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 5px; }
+        .gist-item { padding: 10px; border-bottom: 1px solid #eee; cursor: pointer; display: flex; justify-content: space-between; }
+        .gist-item:hover { background: #f5f5f5; }
+        .gist-date { font-size: 0.8rem; color: var(--gray); }
+
+        /* Modal elegante */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
+        .modal.active { display: flex; }
+        .modal-content { background: white; border-radius: 14px; width: 92%; max-width: 640px; max-height: 80vh; overflow: hidden; box-shadow: 0 18px 40px rgba(0,0,0,0.25); }
+        .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; }
+        .modal-title { font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+        .modal-title .title-icon { background: rgba(255,255,255,0.2); border-radius: 50%; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; }
+        .close-btn { background: none; border: 2px solid rgba(255,255,255,0.7); border-radius: 8px; font-size: 1.1rem; cursor: pointer; color: #fff; padding: 4px 10px; transition: var(--transition); }
+        .close-btn:hover { background: rgba(255,255,255,0.15); }
+
+        .modal-body { padding: 20px; }
+        .modal-info { color: var(--gray); font-size: 0.9rem; margin-bottom: 10px; }
+        .modal-form-row { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; padding: 14px 20px; border-top: 1px solid #eee; background: #fafafa; }
+        .btn { padding: 10px 16px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; transition: var(--transition); }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { filter: brightness(1.05); transform: translateY(-1px); }
+        .btn-secondary { background: var(--gray); color: white; }
+        .btn-secondary:hover { filter: brightness(1.05); transform: translateY(-1px); }
+
+        footer { text-align: center; margin-top: 50px; padding: 20px; color: var(--gray); font-size: 0.9rem; border-top: 1px solid #ddd; }
+
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; text-align: center; }
+            .logo { justify-content: center; margin-bottom: 15px; }
+            nav { flex-direction: column; }
+            .programs-grid { grid-template-columns: 1fr; }
+            .action-buttons { flex-direction: column; }
+        }
+
+        /* Estilos morados específicos para la pantalla de Ayto integrada */
+        .ayto-header { background: linear-gradient(135deg, var(--ayto-color), #b84ccf); color: white; padding: 30px 0; text-align: center; border-radius: 10px; box-shadow: var(--shadow); margin-bottom: 30px; }
+        .ayto-title { font-size: 2.0rem; margin-bottom: 10px; }
+        .ayto-subtitle { font-size: 1.1rem; opacity: 0.95; }
+        .ayto-buttons-container { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; margin-bottom: 30px; }
+        .ayto-project-btn { background-color: white; border: none; border-radius: 8px; padding: 15px 20px; font-size: 1rem; font-weight: 600; color: var(--ayto-color); cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s ease; flex: 1; min-width: 200px; max-width: 280px; }
+        .ayto-project-btn:hover { background-color: var(--ayto-color); color: white; transform: translateY(-3px); box-shadow: 0 6px 10px rgba(0,0,0,0.15); }
+        .ayto-project-btn.active { background-color: var(--ayto-color); color: white; }
+        .ayto-project-info { background-color: white; border-radius: 10px; padding: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: none; animation: fadeIn 0.5s ease; }
+        .ayto-project-info.active { display: block; }
+        .ayto-project-title { color: var(--ayto-color); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #eaeaea; }
+        .ayto-detail-card { background-color: #f8fafc; border-radius: 8px; padding: 15px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .ayto-detail-title { font-weight: 600; color: var(--ayto-color); margin-bottom: 8px; font-size: 1.1rem; }
+        .ayto-activities-list { list-style-type: none; }
+        .ayto-activities-list li { margin-bottom: 8px; padding-left: 20px; position: relative; }
+        .ayto-activities-list li:before { content: "•"; color: var(--ayto-color); font-weight: bold; position: absolute; left: 0; }
+        .ayto-footer { text-align: center; margin-top: 40px; padding: 20px; color: #666; font-size: 0.9rem; }
+        @media (max-width: 768px) {
+            .ayto-project-btn { min-width: 100%; }
+            .ayto-title { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <div>
+                        <h1>Programas Educativos (IES Virgen de Villadiego)</h1>
+						<h2>Versión Equipo Directivo</h2>
+                        <div class="logo-subtitle">Consejería de Desarrollo Educativo y Formación Profesional - Junta de Andalucía</div>
+                        <div id="course-subtitle" class="course-subtitle">Curso 2025-2026</div>
+                    </div>
+                </div>
+                <nav id="main-nav">
+                    <button class="nav-btn active" data-page="home">
+                        <i class="fas fa-home"></i> Inicio
+                    </button>
+                    <a id="dossier-btn" class="nav-btn" href="https://www.juntadeandalucia.es/educacion/portales/documents/20123/2475523/17092025_dosier_programas_educativos.pdf/4272f22a-ec05-b29c-e75a-0e16ded1faf2?t=1758094184028" target="_blank" rel="noopener">
+                        <i class="fas fa-book"></i> Dossier Programas <span id="dossier-course">2025-2026</span>
+                    </a>
+                    <button class="nav-btn" data-page="ayto-projects">
+                        <i class="fas fa-city"></i> Proyectos Ayuntamiento
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <div id="home" class="page active">
+            <h2 class="page-title"><i class="fas fa-home"></i> Portal de Programas Educativos</h2>
+            <p>Seleccione el tipo de programa para gestionar la participación del IES:</p>
+            
+            <div class="action-buttons" style="margin-top: 30px;">
+                <button class="nav-btn" data-page="type-a" style="background: var(--primary); color: white;">
+                    <i class="fas fa-list"></i> Tipo A <br> Participación de oficio
+                </button>
+                <button class="nav-btn" data-page="type-b" style="background: var(--secondary); color: white;">
+                    <i class="fas fa-list"></i> Tipo B <br> Convocatoria general
+                </button>
+                <button class="nav-btn" data-page="type-c" style="background: var(--accent); color: white;">
+                    <i class="fas fa-list"></i> Tipo C <br> Convocatoria específica
+                </button>
+                <button class="nav-btn" data-page="ayto-projects" style="background: var(--ayto-color); color: white;">
+                    <i class="fas fa-city"></i> Proyectos <br> Ayuntamiento
+                </button>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header">
+                    <span><i class="fas fa-cog"></i> Configuración de la Aplicación</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="collapsible-content">
+                    <div class="form-group">
+                        <label for="course-select">Seleccione el curso académico:</label>
+                        <select id="course-select" class="form-control">
+                            <option value="2025-2026">Curso 2025-2026</option>
+                            <option value="2026-2027">Curso 2026-2027</option>
+                            <option value="2027-2028">Curso 2027-2028</option>
+                            <option value="2028-2029">Curso 2028-2029</option>
+                            <option value="2029-2030">Curso 2029-2030</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="teacher-file">Importar listado de profesorado:</label>
+                        <input type="file" id="teacher-file" class="form-control" accept=".txt,.csv">
+                        <small>Formatos aceptados: .txt, .csv</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Profesorado disponible:</label>
+                        <select id="teacher-select" class="teacher-select" size="5">
+                            <option value="">-- Seleccione un profesor --</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group danger-zone" style="padding: 15px; background-color: rgba(220, 53, 69, 0.05); border-radius: 5px;">
+                        <label>Zona de Peligro:</label>
+                        <button id="clear-all-data" class="btn btn-danger">
+                            <i class="fas fa-trash-alt"></i> Limpiar Todos los Datos
+                        </button>
+                        <small class="form-text text-muted" style="display: block; margin-top: 5px;">
+                            Esta operación eliminará todos los datos incluyendo la lista de profesorado. Esta acción no se puede deshacer.
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header">
+                    <span><i class="fas fa-file-export"></i> Exportar/Importar Datos</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="collapsible-content">
+                    <p>Exporte o importe los datos de participación en formato JSON para compartir con el equipo.</p>
+                    <div class="action-buttons">
+                        <button class="action-btn export-btn" id="export-data">
+                            <i class="fas fa-download"></i> Exportar Datos
+                        </button>
+                        <button class="action-btn import-btn" id="import-data">
+                            <i class="fas fa-upload"></i> Importar Datos
+                        </button>
+                    </div>
+                    <input type="file" id="import-file" accept=".json" style="display: none;">
+                    
+                    <div class="github-section">
+                        <div class="form-group">
+                            <label for="github-token">Token de GitHub (para guardar en la nube)</label>
+                            <input type="password" id="github-token" class="form-control" placeholder="Introduzca su token personal de GitHub">
+                        </div>
+                        <div class="action-buttons">
+                            <button class="action-btn export-btn" id="save-to-github">
+                                <i class="fab fa-github"></i> Guardar en GitHub Gist
+                            </button>
+                            <button class="action-btn import-btn" id="load-from-github">
+                                <i class="fab fa-github"></i> Cargar desde GitHub Gist
+                            </button>
+                        </div>
+                        <div id="gist-list" class="gist-list" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header">
+                    <span><i class="fas fa-chart-bar"></i> Generar Informe de Coordinaciones</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="collapsible-content">
+                    <p>Genere un informe con los programas en los que participa el IES y sus coordinadores.</p>
+                    <div class="action-buttons">
+                        <button class="action-btn pdf-btn" id="generate-pdf">
+                            <i class="fas fa-file-pdf"></i> Descargar PDF
+                        </button>
+                        <button class="action-btn html-btn" id="generate-html">
+                            <i class="fas fa-file-code"></i> Descargar HTML
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="type-a" class="page">
+            <button class="back-btn" data-page="home">
+                <i class="fas fa-arrow-left"></i> Volver al Inicio
+            </button>
+            <h2 class="page-title"><i class="fas fa-list"></i> Tipo A - Participación de oficio</h2>
+            <div class="programs-grid" id="programs-type-a"></div>
+        </div>
+
+        <div id="type-b" class="page">
+            <button class="back-btn" data-page="home">
+                <i class="fas fa-arrow-left"></i> Volver al Inicio
+            </button>
+            <h2 class="page-title"><i class="fas fa-list"></i> Tipo B - Convocatoria general</h2>
+            <div class="programs-grid" id="programs-type-b"></div>
+        </div>
+
+        <div id="type-c" class="page">
+            <button class="back-btn" data-page="home">
+                <i class="fas fa-arrow-left"></i> Volver al Inicio
+            </button>
+            <h2 class="page-title"><i class="fas fa-list"></i> Tipo C - Convocatoria específica</h2>
+            <div class="programs-grid" id="programs-type-c"></div>
+        </div>
+        
+        <div id="ayto-projects" class="page">
+            <button class="back-btn" data-page="home">
+                <i class="fas fa-arrow-left"></i> Volver al Inicio
+            </button>
+            <h2 class="page-title"><i class="fas fa-city"></i> Proyectos del Ayuntamiento</h2>
+
+            <div class="ayto-header">
+                <div class="container">
+                    <h1 class="ayto-title">Proyectos en colaboración con el Área de Juventud del Ayuntamiento de Peñaflor</h1>
+                    <p class="ayto-subtitle">Curso <span id="ayto-course-subtitle">2025/2026</span></p>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="ayto-buttons-container">
+                    <button class="ayto-project-btn active" data-project="alfabetizacion">Alfabetización Mediática</button>
+                    <button class="ayto-project-btn" data-project="redes">Redes que Generan Futuro</button>
+                    <button class="ayto-project-btn" data-project="emociones">Cuidando Emociones</button>
+                    <button class="ayto-project-btn" data-project="patrimonio">Conócete, Patrimonialízate</button>
+                </div>
+                
+                <div id="alfabetizacion" class="ayto-project-info active">
+                    <h2 class="ayto-project-title">ALFABETIZACIÓN MEDIÁTICA. INFORMACIÓN, DESINFORMACIÓN Y RRSS</h2>
+                    <div class="project-details">
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Concertación</div>
+                            <p>Proyecto local</p>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Técnico/a responsable</div>
+                            <p>Pablo Sánchez Generoso (PTJ)</p>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Objetivo</div>
+                            <p>Incrementar en los jóvenes su capacidad de evaluación y responsabilidad como usuarios y productores de información y contenido mediático. Proporcionar herramientas para identificar prácticas de desinformación a través de la alfabetización mediática e informativa.</p>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Actividades</div>
+                            <ul class="ayto-activities-list">
+                                <li>Debates sobre noticias y sus fuentes para evaluar fiabilidad</li>
+                                <li>Análisis del crecimiento de medios digitales y nuevas comunidades</li>
+                                <li>Análisis crítico del papel de las redes sociales en la desinformación</li>
+                                <li>Análisis y creación de noticias en distintos formatos</li>
+                            </ul>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Destinatarios</div>
+                            <p>21 jóvenes de 14 a 16 años</p>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Fechas</div>
+                            <p>Enero 2026 - Marzo 2026</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="redes" class="ayto-project-info">
+                    <h2 class="ayto-project-title">REDES QUE GENERAN FUTURO</h2>
+                    <div class="project-details">
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Concertación</div>
+                            <p>Proyecto local</p>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Técnico/a responsable</div>
+                            <p>Pablo Sánchez Generoso (PTJ)</p>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Objetivo</div>
+                            <p>Formar a jóvenes como ciudadanos ecosociales, aumentando su autoeficacia y comprensión del sistema de producción, distribución y consumo.</p>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Actividades</div>
+                            <ul class="ayto-activities-list">
+                                <li>Reunión con el centro educativo</li>
+                                <li>Presentación del programa al grupo</li>
+                                <li>Actividad sobre cambio climático</li>
+                                <li>Análisis de la realidad del municipio</li>
+                            </ul>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Destinatarios</div>
+                            <p>27 jóvenes de 14 a 15 años</p>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Fechas</div>
+                            <p>Enero 2025/Enero 2026 - Diciembre 2025/Junio 2026</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="emociones" class="ayto-project-info">
+                    <h2 class="ayto-project-title">PROYECTO LOCAL "CUIDANDO EMOCIONES"</h2>
+                    <div class="project-details">
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Concertación</div>
+                            <p>Proyecto local</p>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Técnico/a responsable</div>
+                            <p>Pablo Sánchez Generoso (PTJ)</p>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Objetivo</div>
+                            <p>Mejorar el conocimiento y autoconocimiento de las emociones propias y ajenas y su difusión social presencial y digital.</p>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Actividades</div>
+                            <ul class="ayto-activities-list">
+                                <li>Conciencia emocional</li>
+                                <li>Regulación y autonomía emocional</li>
+                                <li>Encuentro "La naturaleza educa"</li>
+                                <li>Habilidades socioemocionales</li>
+                                <li>Evaluación de emociones</li>
+                            </ul>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Destinatarios</div>
+                            <p>54 jóvenes de 12 a 15 años</p>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Fechas</div>
+                            <p>Septiembre 2025 - Marzo 2026</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="patrimonio" class="ayto-project-info">
+                    <h2 class="ayto-project-title">PROYECTO LOCAL "CONÓCETE, PATRIMONIALÍZATE"</h2>
+                    <div class="project-details">
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Concertación</div>
+                            <p>Proyecto local</p>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Técnico/a responsable</div>
+                            <p>Pablo Sánchez Generoso (PTJ)</p>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Objetivo</div>
+                            <p>Concienciar, formar y activar a jóvenes como dinamizadores patrimoniales mediante actividades formativas, teatrales, ambientales y de creación cultural participativa.</p>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Actividades</div>
+                            <ul class="ayto-activities-list">
+                                <li>Patrimonio es todo: lo que vemos, vivimos y recordamos</li>
+                                <li>Entrevistas y relatos del pasado</li>
+                                <li>Expresión corporal y escenas locales</li>
+                                <li>Mujeres en la historia local</li>
+                                <li>Patrimonio natural</li>
+                                <li>Concienciación patrimonial local</li>
+                                <li>Hablar, emocionar, motivar</li>
+                                <li>Diseño de gymkhana histórica y dramatizada</li>
+                                <li>Participación en gymkhana profesional dramatizada</li>
+                                <li>Gymkhana teatralizada "Tras los pasos de Angustias"</li>
+                            </ul>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Destinatarios</div>
+                            <p>52 jóvenes de 13 a 15 años</p>
+                        </div>
+                        <div class="ayto-detail-card">
+                            <div class="ayto-detail-title">Fechas</div>
+                            <p>Octubre 2025 - Marzo 2026</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ayto-footer">
+                <div class="container">
+                    <p>Proyectos en colaboración con el Área de Juventud del Ayuntamiento de Peñaflor - Curso <span id="ayto-footer-course">2025/2026</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal coordinador más estético -->
+    <div id="coordinator-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span class="title-icon"><i class="fas fa-user-cog"></i></span>
+                    Asignar coordinación
+                </h3>
+                <button class="close-btn" id="close-modal">Cerrar</button>
+            </div>
+            <form id="coordinator-form">
+                <div class="modal-body">
+                    <input type="hidden" id="modal-program-id">
+                    <div class="modal-info">
+                        Programa seleccionado: <strong id="modal-program-name">Nombre del Programa</strong>
+                    </div>
+                    <div class="modal-form-row">
+                        <div class="form-group">
+                            <label for="modal-teacher-select">Seleccionar coordinador/a:</label>
+                            <select id="modal-teacher-select" class="teacher-select">
+                                <option value="">-- Seleccione un profesor --</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancel-coordinator">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div id="project-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span class="title-icon"><i class="fas fa-clipboard-list"></i></span>
+                    Detalle del proyecto
+                </h3>
+                <button class="close-btn" id="close-project-modal">Cerrar</button>
+            </div>
+            <div class="modal-body">
+                <div class="project-details" id="project-details"></div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" id="close-project-btn">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Consejería de Desarrollo Educativo y Formación Profesional - Junta de Andalucía © 2025-2026</p>
+        </div>
+    </footer>
+
+    <script>
+        const programsData = {
+            'type-a': [
+                { id: 'a1', name: 'Bienestar Emocional', url: 'https://www.juntadeandalucia.es/educacion/portales/web/planes-y-programas/programas-desarrollo-educativo/bienestar-emocional/presentacion' },
+                { id: 'a2', name: 'Bibliotecas Escolares', url: 'https://www.juntadeandalucia.es/educacion/eaprendizaje/programa-bibliotecas-escolares/' },
+                { id: 'a3', name: 'Código Escuela 4.0', url: 'https://www.juntadeandalucia.es/educacion/eaprendizaje/pct-codigo-escuela-4-0/' },
+                { id: 'a4', name: 'Plan de Actuación Digital', url: 'https://www.juntadeandalucia.es/educacion/eaprendizaje/plan-de-actuacion-digital/' },
+                { id: 'a7', name: 'Plan de Apertura de Centros Docentes', url: '' },
+                { id: 'a8', name: 'Plan de Igualdad de Género en Educación de Andalucía', url: 'https://www.juntadeandalucia.es/educacion/portals/web/igualdad/plan-igualdad/iii-plan-de-igualdad-de-genero-en-educacion-2024/2028' }
+            ],
+            'type-b': [
+                { id: 'b1', name: 'Hábitos de Vida Saludable', url: 'https://www.juntadeandalucia.es/educacion/eaprendizaje/habitos-de-vida-saludable/' },
+                { id: 'b2', name: 'ALDEA', url: 'https://www.juntadeandalucia.es/educacion/eaprendizaje/aldea/' },
+                { id: 'b3', name: 'ConRed', url: 'https://www.juntadeandalucia.es/educacion/portales/web/planes-y-programas/programas-desarrollo-educativo/conred/presentacion' },
+                { id: 'b4', name: 'Alumnado Ayudante Digital Andaluz ADA', url: 'https://www.juntadeandalucia.es/educacion/portales/web/planes-y-programas/programas-desarrollo-educativo/ayudante-digital-ada/presentacion' },
+                { id: 'b5', name: 'ComunicA', url: 'https://www.juntadeandalucia.es/educacion/eaprendizaje/comunica/' },
+                { id: 'b6', name: 'aulaDjaque', url: 'https://www.juntadeandalucia.es/educacion/eaprendizaje/auladjaque/' },
+                { id: 'b7', name: 'Programas Culturales', url: 'https://www.juntadeandalucia.es/educacion/eaprendizaje/programas-culturales/' },
+                { id: 'b8', name: 'Emprendimiento Educativo', url: 'https://www.juntadeandalucia.es/educacion/eaprendizaje/emprendimiento-educativo/' },
+                { id: 'b9', name: 'STEM', url: 'https://www.juntadeandalucia.es/educacion/eaprendizaje/stem/' },
+                { id: 'b10', name: 'Red Andaluza: "Escuela Espacio de Paz"', url: 'https://www.juntadeandalucia.es/educacion/portals/web/convivencia-escolar/red-escuela-espacio-de-paz' },
+                { id: 'b11', name: 'Fénix Andalucía', url: 'https://www.juntadeandalucia.es/educacion/portales/web/planes-y-programas/programas-desarrollo-educativo/fenix-andalucia/presentacion' },
+                { id: 'b12', name: 'Prácticum', url: '' }
+            ],
+            'type-c': [
+                { id: 'c1', name: 'Más Deporte', url: 'https://www.juntadeandalucia.es/educacion/portales/web/planes-y-programas/programas-desarrollo-educativo/mas-deporte/presentacion' },
+                { id: 'c2', name: 'Talleres de Sensibilización de Mediadores', url: 'https://www.juntadeandalucia.es/educacion/eaprendizaje/talleres-mediadores/' },
+                { id: 'c4', name: 'Red de Escuelas Promotoras de Salud de Andalucía (EPSA)', url: 'https://www.juntadeandalucia.es/educacion/eaprendizaje/red-epsa/' },
+                { id: 'c5', name: 'Red Andaluza de Ecoescuelas', url: 'https://www.juntadeandalucia.es/educacion/eaprendizaje/ecoescuelas/' },
+                { id: 'c6', name: 'Proyecto Aulas Verdes Abiertas', url: 'https://www.juntadeandalucia.es/educacion/eaprendizaje/aulas-verdes-abiertas/' },
+                { id: 'c7', name: 'Investiga y Descubre', url: 'https://www.juntadeandalucia.es/educacion/portales/web/planes-y-programas/programas-desarrollo-educativo/investiga-y-descubre/presentacion' },
+                { id: 'c8', name: 'PINPIVMAT', url: 'https://www.juntadeandalucia.es/educacion/portales/centros/innovacion-educativa/investigacion-e-innovacion-educativa/proyectos-investigacion-innovacion-materiales' },
+                { id: 'c9', name: 'Proyectos de Aprendizaje-Servicio APS', url: 'https://www.juntadeandalucia.es/educacion/portales/web/planes-y-programas/programas-desarrollo-educativo/aprendizaje-servicio/presentacion' },
+                { id: 'c10', name: 'Comunidades de Aprendizaje', url: 'https://www.juntadeandalucia.es/educacion/portales/web/planes-y-programas/programas-desarrollo-educativo/comunidades-de-aprendizaje/presentacion' },
+                { id: 'c11', name: 'Programa de Refuerzo Educativo en periodo estival', url: 'https://www.juntadeandalucia.es/educacion/portales/web/planes-y-programas/programas-desarrollo-educativo/programa-de-refuerzo-educativo-en-periodo-estival/presentacion' },
+                { id: 'c12', name: 'Programa de Refuerzo, Orientación y Apoyo (PROA Andalucía)', url: 'https://www.juntadeandalucia.es/educacion/portales/web/planes-y-programas/programas-desarrollo-educativo/proa/presentacion' },
+                { id: 'c13', name: 'PROA+ Transfórmate', url: 'https://www.juntadeandalucia.es/educacion/portales/web/planes-y-programas/planes-y-programas/proa-transformate/presentacion' },
+                { id: 'c14', name: 'Pacto de Estado: Prevención Violencia de Género', url: 'https://www.juntadeandalucia.es/educacion/portales/web/planes-y-programas/programas-desarrollo-educativo/prevencion-violencia-de-genero/presentacion' },
+                { id: 'c15', name: 'Más Equidad', url: 'https://www.juntadeandalucia.es/educacion/portales/web/planes-y-programas/programas-desarrollo-educativo/mas-equidad/presentacion' },
+                { id: 'c17', name: 'PicassoMob', url: 'https://www.juntadeandalucia.es/educacion/portales/web/programas-educativos-internacionales/ensenanza-bilingue/actuaciones-con-francia/picasso-mob' },
+                { id: 'c18', name: 'Aulas Confucio', url: 'https://www.juntadeandalucia.es/educacion/portales/web/programas-educativos-internacionales/otros-programas/aulas-confucio' },
+                { id: 'c19', name: 'Programa de Intercambios Escolares', url: 'https://www.juntadeandalucia.es/educacion/portales/web/programas-educativos-internacionales/otros-programas/intercambios-escolares' }
+            ],
+            'ayto-projects': []
+        };
+        
+        function getCurrentCourse() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth() + 1;
+            return month >= 9 ? `${year}-${year + 1}` : `${year - 1}-${year}`;
+        }
+
+        let appState = {
+            participation: {},
+            githubToken: '',
+            selectedCourse: getCurrentCourse(),
+            teachers: []
+        };
+
+        const programIndex = {};
+        for (const type in programsData) {
+            programsData[type].forEach(p => { programIndex[p.id] = p; });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedData();
+            initNavigation();
+            initPrograms();
+            initEvents();
+            initCollapsibles();
+            setupClearDataButton();
+            initAytoTab();
+
+            // Sincroniza curso en cabecera, dossier y ayto
+            const dossierCourseEl = document.getElementById('dossier-course');
+            if (dossierCourseEl) dossierCourseEl.textContent = appState.selectedCourse || getCurrentCourse();
+            syncAytoCourse();
+        });
+
+        function initNavigation() {
+            const navButtons = document.querySelectorAll('.nav-btn, .back-btn');
+            const headerNavButtons = document.querySelectorAll('header .nav-btn');
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetPage = this.getAttribute('data-page');
+                    if (!targetPage) return;
+                    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+                    const targetEl = document.getElementById(targetPage);
+                    if (targetEl) targetEl.classList.add('active');
+                    headerNavButtons.forEach(btn => btn.classList.remove('active'));
+                    const headerBtn = document.querySelector(`header .nav-btn[data-page="${targetPage}"]`);
+                    if (headerBtn) headerBtn.classList.add('active');
+                });
+            });
+        }
+
+        function initPrograms() {
+            for (const type in programsData) {
+                const container = document.getElementById(`programs-${type}`);
+                if (!container) continue;
+                container.innerHTML = '';
+
+                programsData[type].forEach(program => {
+                    const participation = appState.participation[program.id] || { participates: false, coordinator: '' };
+                    const programCard = document.createElement('div');
+                    programCard.className = `program-card ${type === 'ayto-projects' ? 'type-ayto' : type}`;
+
+                    const coordText = `
+                        <div class="coord-label" id="coord-${program.id}" ${participation.coordinator ? '' : 'style="display:none;"'}>
+                            <span class="label">Coordinación:</span> <span class="coord-name">${participation.coordinator || ''}</span>
+                        </div>
+                    `;
+
+                    const btnLabel = participation.coordinator ? 'Reasignar coordinación' : 'Asignar coordinación';
+                    const btnClass = participation.coordinator ? 'coordinator-btn reassign' : 'coordinator-btn';
+
+                    programCard.innerHTML = `
+                        <div class="program-header">
+                            <div>
+                                <div class="program-name">${program.name}</div>
+                                <a href="${program.url}" target="_blank" class="program-link">
+                                    <i class="fas fa-external-link-alt"></i> Más información
+                                </a>
+                                ${coordText}
+                            </div>
+                        </div>
+                        <div class="program-check">
+                            <label class="check-label">
+                                <input type="checkbox" id="check-${program.id}" ${participation.participates ? 'checked' : ''}>
+                                El IES participa en este programa
+                            </label>
+                        </div>
+                        <button class="${btnClass}" id="coordinator-${program.id}" ${participation.participates ? '' : 'style="display: none;"'}>
+                            <i class="fas fa-user-edit"></i> ${btnLabel}
+                        </button>
+                    `;
+
+                    container.appendChild(programCard);
+
+                    const checkbox = document.getElementById(`check-${program.id}`);
+                    const coordinatorBtn = document.getElementById(`coordinator-${program.id}`);
+                    const coordLabel = document.getElementById(`coord-${program.id}`);
+
+                    // Garantiza estado inicial correcto del botón y etiqueta
+                    if (participation.participates) {
+                        coordinatorBtn.style.display = 'block';
+                        if (participation.coordinator) {
+                            coordinatorBtn.classList.add('reassign');
+                            coordinatorBtn.innerHTML = '<i class="fas fa-user-edit"></i> Reasignar coordinación';
+                            coordLabel.style.display = 'block';
+                        }
+                    }
+
+                    checkbox.addEventListener('change', function() {
+                        handleParticipationChange(program.id, this.checked);
+                        if (this.checked) {
+                            coordinatorBtn.style.display = 'block';
+                            validateCoordinatorAssignment(program.id, checkbox);
+                        } else {
+                            coordinatorBtn.style.display = 'none';
+                            const row = checkbox.closest('.program-card');
+                            row.classList.remove('table-warning', 'table-danger');
+                            if (appState.participation[program.id]) {
+                                delete appState.participation[program.id].coordinator;
+                            }
+                            coordLabel.style.display = 'none';
+                            const nameEl = coordLabel.querySelector('.coord-name');
+                            if (nameEl) nameEl.textContent = '';
+                            coordinatorBtn.innerHTML = '<i class="fas fa-user-edit"></i> Asignar coordinación';
+                            coordinatorBtn.classList.remove('reassign');
+                            saveData();
+                        }
+                    });
+
+                    coordinatorBtn.addEventListener('click', function() {
+                        openCoordinatorModal(program.id, program.name);
+                    });
+                });
+            }
+        }
+
+        function handleParticipationChange(programId, participates) {
+            if (!appState.participation[programId]) appState.participation[programId] = {};
+            appState.participation[programId].participates = participates;
+            saveData();
+        }
+
+        function validateCoordinatorAssignment(programId, checkbox) {
+            const participation = appState.participation[programId] || {};
+            if (participation.participates && !participation.coordinator) {
+                const row = checkbox.closest('.program-card');
+                row.classList.add('table-warning');
+                setTimeout(() => {
+                    const programName = programIndex[programId]?.name || programId;
+                    alert(`El programa "${programName}" tiene participación marcada pero no tiene coordinador asignado. Por favor, asigne un coordinador.`);
+                    openCoordinatorModal(programId, programName);
+                }, 300);
+            }
+        }
+
+        function openCoordinatorModal(programId, programName) {
+            const modal = document.getElementById('coordinator-modal');
+            const programNameElement = document.getElementById('modal-program-name');
+            const programIdInput = document.getElementById('modal-program-id');
+            const teacherSelect = document.getElementById('modal-teacher-select');
+
+            programNameElement.textContent = programName;
+            programIdInput.value = programId;
+            teacherSelect.innerHTML = '<option value="">-- Seleccione un profesor --</option>';
+
+            appState.teachers.forEach(teacher => {
+                const option = document.createElement('option');
+                option.value = teacher;
+                option.textContent = teacher;
+                teacherSelect.appendChild(option);
+            });
+
+            const currentCoord = appState.participation[programId]?.coordinator || '';
+            if (currentCoord) teacherSelect.value = currentCoord;
+
+            modal.classList.add('active');
+        }
+
+        function initEvents() {
+            document.getElementById('close-modal').addEventListener('click', closeCoordinatorModal);
+            document.getElementById('cancel-coordinator').addEventListener('click', closeCoordinatorModal);
+
+            document.getElementById('close-project-modal').addEventListener('click', closeProjectModal);
+            document.getElementById('close-project-btn').addEventListener('click', closeProjectModal);
+
+            document.getElementById('coordinator-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const programId = document.getElementById('modal-program-id').value;
+                const teacher = document.getElementById('modal-teacher-select').value;
+                if (!teacher) { alert('Seleccione un coordinador.'); return; }
+
+                if (!appState.participation[programId]) appState.participation[programId] = {};
+                appState.participation[programId].coordinator = teacher;
+
+                saveData();
+                closeCoordinatorModal();
+
+                const coordLabel = document.getElementById(`coord-${programId}`);
+                const coordinatorBtn = document.getElementById(`coordinator-${programId}`);
+                if (coordLabel) {
+                    const nameEl = coordLabel.querySelector('.coord-name');
+                    if (nameEl) nameEl.textContent = teacher;
+                    coordLabel.style.display = 'block';
+                }
+                if (coordinatorBtn) {
+                    coordinatorBtn.innerHTML = '<i class="fas fa-user-edit"></i> Reasignar coordinación';
+                    coordinatorBtn.classList.add('reassign');
+                    coordinatorBtn.style.display = 'block';
+                }
+                const checkbox = document.getElementById(`check-${programId}`);
+                if (checkbox) {
+                    const row = checkbox.closest('.program-card');
+                    row.classList.remove('table-warning', 'table-danger');
+                }
+            });
+
+            document.getElementById('export-data').addEventListener('click', exportData);
+            document.getElementById('import-data').addEventListener('click', function() {
+                document.getElementById('import-file').click();
+            });
+            document.getElementById('import-file').addEventListener('change', importData);
+            document.getElementById('save-to-github').addEventListener('click', saveToGitHub);
+            document.getElementById('load-from-github').addEventListener('click', loadFromGitHub);
+            document.getElementById('generate-pdf').addEventListener('click', generatePDF);
+            document.getElementById('generate-html').addEventListener('click', generateHTML);
+
+            document.getElementById('github-token').addEventListener('input', function() {
+                appState.githubToken = this.value;
+                saveData();
+            });
+
+            document.getElementById('course-select').addEventListener('change', function() {
+                appState.selectedCourse = this.value;
+                document.getElementById('course-subtitle').textContent = `Curso ${this.value}`;
+                const dossierCourseEl = document.getElementById('dossier-course');
+                if (dossierCourseEl) dossierCourseEl.textContent = this.value;
+                syncAytoCourse();
+                saveData();
+            });
+
+            document.getElementById('teacher-file').addEventListener('change', handleTeacherFile);
+        }
+
+        function closeCoordinatorModal() { document.getElementById('coordinator-modal').classList.remove('active'); }
+        function closeProjectModal() { document.getElementById('project-modal').classList.remove('active'); }
+
+        function initCollapsibles() {
+            const collapsibles = document.querySelectorAll('.collapsible');
+            collapsibles.forEach(collapsible => {
+                const header = collapsible.querySelector('.collapsible-header');
+                header.addEventListener('click', function() {
+                    collapsible.classList.toggle('active');
+                    const icon = this.querySelector('.fa-chevron-down, .fa-chevron-up');
+                    if (!icon) return;
+                    if (collapsible.classList.contains('active')) {
+                        icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+                    } else {
+                        icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                    }
+                });
+            });
+        }
+
+        function setupClearDataButton() {
+            const clearButton = document.getElementById('clear-all-data');
+            if (clearButton) {
+                clearButton.addEventListener('click', function() {
+                    if (confirm('¿ESTÁ SEGURO DE QUE QUIERE ELIMINAR TODOS LOS DATOS?\n\nEsta acción eliminará:\n- Lista completa de profesorado\n- Datos de planes y proyectos\n- Toda la configuración\n\nEsta operación NO se puede deshacer.')) {
+                        localStorage.removeItem('teacherList');
+                        localStorage.removeItem('planData');
+                        localStorage.removeItem('projectData');
+                        localStorage.removeItem('tutorialSeen');
+                        localStorage.removeItem('appSettings');
+                        localStorage.removeItem('programsAppData');
+                        alert('Todos los datos han sido eliminados. La página se recargará.');
+                        location.reload();
+                    }
+                });
+            }
+        }
+
+        function normalizeName(name) {
+            const replacements = {
+                'Ã¡': 'á', 'Ã©': 'é', 'Ã­': 'í', 'Ã³': 'ó', 'Ãº': 'ú', 'Ãñ': 'ñ',
+                'Ã': 'Á', 'Ã‰': 'É', 'Ã': 'Í', 'Ã“': 'Ó', 'Ãš': 'Ú', 'Ã‘': 'Ñ',
+                'Ã¼': 'ü', 'Ãœ': 'Ü', 'Ã§': 'ç', 'Ã‡': 'Ç',
+                'Â¿': '¿', 'Â¡': '¡', 'Â´': "'", 'Âª': 'ª', 'Âº': 'º',
+                'â‚¬': '€', 'â€': '"', 'â€œ': '"', 'â€�': '"', 'â€¦': '…'
+            };
+            let normalized = name;
+            Object.keys(replacements).forEach(badChar => {
+                const goodChar = replacements[badChar];
+                normalized = normalized.replace(new RegExp(badChar, 'g'), goodChar);
+            });
+            if (typeof TextDecoder !== 'undefined') {
+                try {
+                    const bytes = new Uint8Array(normalized.length);
+                    for (let i = 0; i < normalized.length; i++) bytes[i] = normalized.charCodeAt(i);
+                    const decoder = new TextDecoder('latin1');
+                    normalized = decoder.decode(bytes);
+                } catch (e) { console.warn('No se pudo decodificar con TextDecoder:', e); }
+            }
+            return normalized.trim();
+        }
+
+        function saveData() {
+            localStorage.setItem('programsAppData', JSON.stringify(appState));
+        }
+
+        function loadSavedData() {
+            const savedData = localStorage.getItem('programsAppData');
+            if (savedData) {
+                appState = JSON.parse(savedData);
+                if (appState.githubToken) {
+                    document.getElementById('github-token').value = appState.githubToken;
+                }
+                if (appState.selectedCourse) {
+                    document.getElementById('course-select').value = appState.selectedCourse;
+                    document.getElementById('course-subtitle').textContent = `Curso ${appState.selectedCourse}`;
+                } else {
+                    appState.selectedCourse = getCurrentCourse();
+                    document.getElementById('course-select').value = appState.selectedCourse;
+                    document.getElementById('course-subtitle').textContent = `Curso ${appState.selectedCourse}`;
+                }
+                if (appState.teachers && appState.teachers.length > 0) {
+                    updateTeacherSelectors();
+                }
+            } else {
+                appState.selectedCourse = getCurrentCourse();
+                document.getElementById('course-select').value = appState.selectedCourse;
+                document.getElementById('course-subtitle').textContent = `Curso ${appState.selectedCourse}`;
+                saveData();
+            }
+        }
+
+        function handleTeacherFile(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    let teachers = [];
+                    const content = e.target.result;
+                    if (file.name.endsWith('.txt')) {
+                        teachers = parseTxtFile(content);
+                    } else if (file.name.endsWith('.csv')) {
+                        teachers = parseCsvFile(content);
+                    }
+                    teachers = teachers.map(teacher => normalizeName(teacher));
+                    appState.teachers = teachers;
+                    updateTeacherSelectors();
+                    saveData();
+                    alert(`Se han importado ${teachers.length} profesores correctamente.`);
+                } catch (error) {
+                    alert('Error al procesar el archivo. Verifique que el formato sea correcto.');
+                    console.error(error);
+                }
+            };
+            reader.readAsText(file, 'ISO-8859-1');
+            event.target.value = '';
+        }
+
+        function parseTxtFile(content) {
+            const lines = content.split('\n');
+            const teachers = [];
+            for (let line of lines) {
+                line = line.trim();
+                if (!line || line.startsWith('-') || line === 'Empleado/a') continue;
+                teachers.push(line);
+            }
+            return teachers;
+        }
+
+        function parseCsvFile(content) {
+            const lines = content.split('\n');
+            const teachers = [];
+            for (let line of lines) {
+                line = line.trim();
+                if (!line || line === '"Empleado/a"') continue;
+                const teacher = line.replace(/"/g, '').trim();
+                if (teacher) teachers.push(teacher);
+            }
+            return teachers;
+        }
+
+        function updateTeacherSelectors() {
+            const teacherSelect = document.getElementById('teacher-select');
+            const modalTeacherSelect = document.getElementById('modal-teacher-select');
+            teacherSelect.innerHTML = '<option value="">-- Seleccione un profesor --</option>';
+            modalTeacherSelect.innerHTML = '<option value="">-- Seleccione un profesor --</option>';
+            appState.teachers.forEach(teacher => {
+                const option = document.createElement('option');
+                option.value = teacher;
+                option.textContent = teacher;
+                teacherSelect.appendChild(option.cloneNode(true));
+                modalTeacherSelect.appendChild(option);
+            });
+        }
+
+        function exportData() {
+            const dataStr = JSON.stringify(appState, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'programas-educativos-datos.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    appState = importedData;
+                    saveData();
+                    initPrograms();
+
+                    if (appState.githubToken) {
+                        document.getElementById('github-token').value = appState.githubToken;
+                    }
+                    if (appState.selectedCourse) {
+                        document.getElementById('course-select').value = appState.selectedCourse;
+                        document.getElementById('course-subtitle').textContent = `Curso ${appState.selectedCourse}`;
+                        const dossierCourseEl = document.getElementById('dossier-course');
+                        if (dossierCourseEl) dossierCourseEl.textContent = appState.selectedCourse;
+                        syncAytoCourse();
+                    }
+                    if (appState.teachers && appState.teachers.length > 0) {
+                        updateTeacherSelectors();
+                    }
+
+                    // Refresca etiquetas/botones tras la importación
+                    for (const type in programsData) {
+                        programsData[type].forEach(program => {
+                            const participation = appState.participation[program.id];
+                            const coordLabel = document.getElementById(`coord-${program.id}`);
+                            const coordinatorBtn = document.getElementById(`coordinator-${program.id}`);
+                            const checkbox = document.getElementById(`check-${program.id}`);
+                            if (coordLabel && coordinatorBtn && checkbox) {
+                                const hasCoord = participation && participation.coordinator;
+                                const participates = participation && participation.participates;
+                                if (hasCoord) {
+                                    coordLabel.style.display = 'block';
+                                    const nameEl = coordLabel.querySelector('.coord-name');
+                                    if (nameEl) nameEl.textContent = participation.coordinator;
+                                    coordinatorBtn.innerHTML = '<i class="fas fa-user-edit"></i> Reasignar coordinación';
+                                    coordinatorBtn.classList.add('reassign');
+                                } else {
+                                    coordLabel.style.display = 'none';
+                                    coordinatorBtn.innerHTML = '<i class="fas fa-user-edit"></i> Asignar coordinación';
+                                    coordinatorBtn.classList.remove('reassign');
+                                }
+                                coordinatorBtn.style.display = participates ? 'block' : 'none';
+                                checkbox.checked = !!participates;
+                            }
+                        });
+                    }
+
+                    alert('Datos importados correctamente.');
+                } catch (error) {
+                    alert('Error al importar los datos. Verifique que el archivo es válido.');
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        async function saveToGitHub() {
+            if (!appState.githubToken) {
+                alert('Por favor, introduzca un token de GitHub.');
+                return;
+            }
+            try {
+                const { githubToken, ...dataWithoutToken } = appState;
+                const dataStr = JSON.stringify(dataWithoutToken, null, 2);
+                const gistData = {
+                    description: 'Datos de Programas Educativos - Junta de Andalucía',
+                    public: false,
+                    files: { 'programas-educativos-datos.json': { content: dataStr } }
+                };
+                const response = await fetch('https://api.github.com/gists', {
+                    method: 'POST',
+                    headers: { 'Authorization': `token ${appState.githubToken}`, 'Content-Type': 'application/json' },
+                    body: JSON.stringify(gistData)
+                });
+                if (response.ok) {
+                    alert('Datos guardados correctamente en GitHub Gist.');
+                } else {
+                    const error = await response.json();
+                    alert(`Error al guardar en GitHub: ${error.message}`);
+                }
+            } catch (error) {
+                alert('Error de conexión al intentar guardar en GitHub.');
+            }
+        }
+
+        async function loadFromGitHub() {
+            if (!appState.githubToken) {
+                alert('Por favor, introduzca un token de GitHub.');
+                return;
+            }
+            try {
+                const response = await fetch('https://api.github.com/gists', {
+                    headers: { 'Authorization': `token ${appState.githubToken}` }
+                });
+                if (response.ok) {
+                    const gists = await response.json();
+                    displayGistList(gists);
+                } else {
+                    const error = await response.json();
+                    alert(`Error al cargar desde GitHub: ${error.message}`);
+                }
+            } catch (error) {
+                alert('Error de conexión al intentar cargar desde GitHub.');
+            }
+        }
+
+        function displayGistList(gists) {
+            const gistList = document.getElementById('gist-list');
+            gistList.innerHTML = '';
+            gistList.style.display = 'block';
+            const relevantGists = gists.filter(gist => gist.description && gist.description.includes('Programas Educativos'));
+            if (relevantGists.length === 0) {
+                gistList.innerHTML = '<div class="gist-item">No se encontraron Gists relevantes.</div>';
+                return;
+            }
+            relevantGists.forEach(gist => {
+                const gistItem = document.createElement('div');
+                gistItem.className = 'gist-item';
+                const date = new Date(gist.created_at).toLocaleDateString('es-ES');
+                gistItem.innerHTML = `<div>${gist.description}</div><div class="gist-date">${date}</div>`;
+                gistItem.addEventListener('click', async function() {
+                    await loadGistData(gist.id);
+                    gistList.style.display = 'none';
+                });
+                gistList.appendChild(gistItem);
+            });
+        }
+
+        async function loadGistData(gistId) {
+            try {
+                const response = await fetch(`https://api.github.com/gists/${gistId}`, {
+                    headers: { 'Authorization': `token ${appState.githubToken}` }
+                });
+                if (response.ok) {
+                    const gist = await response.json();
+                    const file = gist.files[Object.keys(gist.files)[0]];
+                    if (file) {
+                        const importedData = JSON.parse(file.content);
+                        const currentToken = appState.githubToken;
+                        appState = { ...importedData, githubToken: currentToken };
+                        saveData();
+                        initPrograms();
+
+                        if (appState.githubToken) document.getElementById('github-token').value = appState.githubToken;
+                        if (appState.selectedCourse) {
+                            document.getElementById('course-select').value = appState.selectedCourse;
+                            document.getElementById('course-subtitle').textContent = `Curso ${appState.selectedCourse}`;
+                            const dossierCourseEl = document.getElementById('dossier-course');
+                            if (dossierCourseEl) dossierCourseEl.textContent = appState.selectedCourse;
+                            syncAytoCourse();
+                        }
+                        if (appState.teachers && appState.teachers.length > 0) updateTeacherSelectors();
+
+                        // Sincroniza etiquetas y botones
+                        for (const type in programsData) {
+                            programsData[type].forEach(program => {
+                                const participation = appState.participation[program.id];
+                                const coordLabel = document.getElementById(`coord-${program.id}`);
+                                const coordinatorBtn = document.getElementById(`coordinator-${program.id}`);
+                                const checkbox = document.getElementById(`check-${program.id}`);
+                                if (coordLabel && coordinatorBtn && checkbox) {
+                                    const hasCoord = participation && participation.coordinator;
+                                    const participates = participation && participation.participates;
+                                    if (hasCoord) {
+                                        coordLabel.style.display = 'block';
+                                        const nameEl = coordLabel.querySelector('.coord-name');
+                                        if (nameEl) nameEl.textContent = participation.coordinator;
+                                        coordinatorBtn.innerHTML = '<i class="fas fa-user-edit"></i> Reasignar coordinación';
+                                        coordinatorBtn.classList.add('reassign');
+                                    } else {
+                                        coordLabel.style.display = 'none';
+                                        coordinatorBtn.innerHTML = '<i class="fas fa-user-edit"></i> Asignar coordinación';
+                                        coordinatorBtn.classList.remove('reassign');
+                                    }
+                                    coordinatorBtn.style.display = participates ? 'block' : 'none';
+                                    checkbox.checked = !!participates;
+                                }
+                            });
+                        }
+
+                        alert('Datos cargados correctamente desde GitHub Gist.');
+                    }
+                } else {
+                    const error = await response.json();
+                    alert(`Error al cargar el Gist: ${error.message}`);
+                }
+            } catch (error) {
+                alert('Error de conexión al intentar cargar el Gist.');
+            }
+        }
+
+        function generatePDF() {
+            const validationResult = validateCoordinatorAssignments();
+            if (!validationResult.isValid) {
+                alert(`No se puede generar el PDF. Los siguientes programas tienen participación marcada pero no tienen coordinador asignado:\n\n- ${validationResult.errors.join('\n- ')}\n\nPor favor, asigne coordinadores a estos programas antes de generar el informe.`);
+                return;
+            }
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFontSize(20);
+            doc.setFont(undefined, 'bold');
+            doc.setTextColor(0, 85, 164);
+            doc.text('IES VIRGEN DE VILLADIEGO', 105, 20, { align: 'center' });
+            doc.setFontSize(16);
+            doc.setTextColor(0, 146, 70);
+            doc.text('PLANES Y PROGRAMAS CURSO ' + appState.selectedCourse, 105, 30, { align: 'center' });
+            let y = 50;
+            const reportData = getReportData();
+            for (const type in reportData) {
+                if (reportData[type].length > 0) {
+                    doc.setFontSize(14);
+                    doc.setFont(undefined, 'bold');
+                    doc.setTextColor(0, 85, 164);
+                    doc.text(type, 14, y);
+                    y += 10;
+                    const headers = [['NOMBRE DEL PROGRAMA', 'COORDINACIÓN']];
+                    const tableData = reportData[type].map(item => [item.program, item.coordinator]);
+                    doc.autoTable({
+                        startY: y,
+                        head: headers,
+                        body: tableData,
+                        theme: 'grid',
+                        headStyles: { fillColor: [0, 85, 164], textColor: 255, fontStyle: 'bold' },
+                        styles: { fontSize: 10, cellPadding: 3 },
+                        columnStyles: { 0: { cellWidth: 'auto' }, 1: { cellWidth: 'auto' } },
+                        margin: { top: 10 }
+                    });
+                    y = doc.lastAutoTable.finalY + 15;
+                    if (y > 250) { doc.addPage(); y = 20; }
+                }
+            }
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8);
+                doc.setTextColor(100);
+                doc.text(`Página ${i} de ${pageCount} - Generado el ${new Date().toLocaleDateString('es-ES')}`, 105, 285, { align: 'center' });
+            }
+            doc.save('informe-coordinaciones-ies-virgen-villadiego.pdf');
+        }
+
+        function generateHTML() {
+            const validationResult = validateCoordinatorAssignments();
+            if (!validationResult.isValid) {
+                alert(`No se puede generar el HTML. Los siguientes programas tienen participación marcada pero no tienen coordinador asignado:\n\n- ${validationResult.errors.join('\n- ')}\n\nPor favor, asigne coordinadores a estos programas antes de generar el informe.`);
+                return;
+            }
+            const reportData = getReportData();
+            let htmlContent = `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe de Coordinaciones - IES Virgen de Villadiego</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 30px; color: #333; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); min-height: 100vh; }
+        .report-container { max-width: 1000px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); padding: 40px; position: relative; overflow: hidden; }
+        .report-container::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 8px; background: linear-gradient(90deg, #0055a4 0%, #009246 100%); }
+        .header { text-align: center; margin-bottom: 40px; padding-bottom: 25px; border-bottom: 2px solid #e9ecef; position: relative; }
+        .header::after { content: ''; position: absolute; bottom: -2px; left: 25%; width: 50%; height: 3px; background: linear-gradient(90deg, #0055a4 0%, #009246 100%); border-radius: 3px; }
+        .title { color: #0055a4; font-size: 32px; font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+        .subtitle { color: #009246; font-size: 20px; font-weight: 600; margin-bottom: 15px; }
+        .section { margin-bottom: 40px; background: #f8f9fa; border-radius: 10px; padding: 25px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); transition: transform 0.3s ease; }
+        .section:hover { transform: translateY(-5px); }
+        .section-title { color: #0055a4; font-size: 22px; font-weight: 700; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #0055a4; display: flex; align-items: center; }
+        .section-title::before { content: '▶'; margin-right: 10px; color: #009246; font-size: 18px; }
+        .report-table { width: 100%; border-collapse: collapse; margin-bottom: 10px; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); }
+        .report-table th { background: linear-gradient(135deg, #0055a4 0%, #004085 100%); color: white; font-weight: 600; text-align: left; padding: 15px 20px; font-size: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .report-table td { padding: 15px 20px; border-bottom: 1px solid #e9ecef; font-size: 15px; transition: background-color 0.2s ease; }
+        .report-table tr:nth-child(even) { background-color: #f8f9fa; }
+        .report-table tr:hover td { background-color: #e3f2fd; }
+        .program-name { font-weight: 600; color: #0055a4; }
+        .coordinator-name { color: #009246; font-weight: 500; }
+        .footer { text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid #e9ecef; color: #6c757d; font-size: 14px; }
+        .logo { display: inline-block; margin-top: 20px; padding: 10px 20px; background: #f8f9fa; border-radius: 8px; color: #0055a4; font-weight: 600; }
+        @media print { body { background: white; padding: 0; } .report-container { box-shadow: none; padding: 20px; } .section { box-shadow: none; page-break-inside: avoid; } }
+    </style>
+</head>
+<body>
+    <div class="report-container">
+        <div class="header">
+            <h1 class="title">IES VIRGEN DE VILLADIEGO</h1>
+            <h2 class="subtitle">PLANES Y PROGRAMAS CURSO ${appState.selectedCourse}</h2>
+            <div class="logo">Consejería de Desarrollo Educativo y Formación Profesional - Junta de Andalucía</div>
+        </div>`;
+            for (const type in reportData) {
+                if (reportData[type].length > 0) {
+                    htmlContent += `
+        <div class="section">
+            <h3 class="section-title">${type}</h3>
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>NOMBRE DEL PROGRAMA</th>
+                        <th>COORDINACIÓN</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+                    reportData[type].forEach(item => {
+                        htmlContent += `
+                    <tr>
+                        <td class="program-name">${item.program}</td>
+                        <td class="coordinator-name">${item.coordinator}</td>
+                    </tr>`;
+                    });
+                    htmlContent += `
+                </tbody>
+            </table>
+        </div>`;
+                }
+            }
+            htmlContent += `
+        <div class="footer">
+            <p>Documento generado el ${new Date().toLocaleDateString('es-ES', { 
+                year: 'numeric', month: 'long', day: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            })}</p>
+        </div>
+    </div>
+</body>
+</html>`;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'informe-coordinaciones-ies-virgen-villadiego.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function getReportData() {
+            const reportData = { 'Tipo A': [], 'Tipo B': [], 'Tipo C': [] };
+            for (const type in programsData) {
+                if (type === 'ayto-projects') continue;
+                const typeName = type === 'type-a' ? 'Tipo A' : type === 'type-b' ? 'Tipo B' : 'Tipo C';
+                programsData[type].forEach(program => {
+                    const participation = appState.participation[program.id];
+                    if (participation && participation.participates && participation.coordinator) {
+                        reportData[typeName].push({ program: program.name, coordinator: participation.coordinator });
+                    }
+                });
+            }
+            return reportData;
+        }
+
+        function validateCoordinatorAssignments() {
+            const errors = [];
+            for (const type in programsData) {
+                if (type === 'ayto-projects') continue;
+                programsData[type].forEach(program => {
+                    const participation = appState.participation[program.id];
+                    if (participation && participation.participates && !participation.coordinator) {
+                        errors.push(program.name);
+                    }
+                });
+            }
+            return { isValid: errors.length === 0, errors: errors };
+        }
+
+        function initAytoTab() {
+            const buttons = document.querySelectorAll('#ayto-projects .ayto-project-btn');
+            const infos = document.querySelectorAll('#ayto-projects .ayto-project-info');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    buttons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    infos.forEach(info => info.classList.remove('active'));
+                    const id = this.getAttribute('data-project');
+                    const target = document.getElementById(id);
+                    if (target) target.classList.add('active');
+                });
+            });
+        }
+
+        function syncAytoCourse() {
+            const aytoCourseEl = document.getElementById('ayto-course-subtitle');
+            const aytoFooterCourseEl = document.getElementById('ayto-footer-course');
+            const selected = appState.selectedCourse || getCurrentCourse();
+            if (aytoCourseEl) aytoCourseEl.textContent = selected.replace('-', '/');
+            if (aytoFooterCourseEl) aytoFooterCourseEl.textContent = selected.replace('-', '/');
+        }
+    </script>
+</body>
+</html>
