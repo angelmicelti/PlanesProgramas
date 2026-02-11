@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Programas Educativos - Junta de Andalucía</title>
-	<link rel="manifest" href="manifest.json">
-	<meta name="theme-color" content="#0055a4">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0055a4">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -63,7 +63,6 @@
         .program-link { color: var(--secondary); text-decoration: none; font-size: 0.9rem; display: flex; align-items: center; gap: 5px; }
         .program-link:hover { text-decoration: underline; }
 
-        /* Etiqueta de coordinación */
         .coord-label { margin-top: 8px; font-size: 0.95rem; color: var(--dark); }
         .coord-label .label { color: var(--primary); font-weight: 600; }
 
@@ -103,7 +102,7 @@
         .gist-item:hover { background: #f5f5f5; }
         .gist-date { font-size: 0.8rem; color: var(--gray); }
 
-        /* Modal elegante */
+        /* Modal elegante (base) */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(2px); }
         .modal.active { display: flex; }
         .modal-content { background: white; border-radius: 14px; width: 92%; max-width: 640px; max-height: 80vh; overflow: hidden; box-shadow: 0 18px 40px rgba(0,0,0,0.25); }
@@ -112,7 +111,6 @@
         .modal-title .title-icon { background: rgba(255,255,255,0.2); border-radius: 50%; width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; }
         .close-btn { background: none; border: 2px solid rgba(255,255,255,0.7); border-radius: 8px; font-size: 1.1rem; cursor: pointer; color: #fff; padding: 4px 10px; transition: var(--transition); }
         .close-btn:hover { background: rgba(255,255,255,0.15); }
-
         .modal-body { padding: 20px; }
         .modal-info { color: var(--gray); font-size: 0.9rem; margin-bottom: 10px; }
         .modal-form-row { display: grid; grid-template-columns: 1fr; gap: 12px; }
@@ -125,6 +123,48 @@
 
         footer { text-align: center; margin-top: 50px; padding: 20px; color: var(--gray); font-size: 0.9rem; border-top: 1px solid #ddd; }
 
+        /* ----- NUEVOS ESTILOS PARA GITHUB AVANZADO ----- */
+        #auth-status { background-color: rgba(0,0,0,0.3); padding: 6px 14px; border-radius: 30px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+        #auth-status i { font-size: 0.9rem; }
+        .token-file-upload { display: flex; align-items: center; gap: 8px; margin-top: 5px; }
+        #token-file-name { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        .interface-blocker {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.9); backdrop-filter: blur(4px);
+            z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center;
+        }
+        .spinner { width: 40px; height: 40px; border: 4px solid #f3f3f3; border-top: 4px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        #loading-message { font-size: 1.2rem; color: var(--primary); font-weight: bold; }
+
+        .last-update-indicator {
+            position: fixed; bottom: 20px; right: 20px; background: rgba(0,0,0,0.8);
+            color: white; padding: 12px 18px; border-radius: 8px; font-size: 0.8rem;
+            backdrop-filter: blur(4px); box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            display: flex; align-items: center; gap: 8px; z-index: 10000;
+            cursor: pointer; transition: opacity 0.3s;
+        }
+        .last-update-indicator.fade-out { opacity: 0; }
+        .hidden { display: none !important; }
+
+        .notification-area {
+            position: fixed; bottom: 20px; left: 20px; z-index: 10001;
+        }
+        .notification {
+            background: var(--secondary); color: white; padding: 12px 20px;
+            border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex; align-items: center; gap: 10px; font-weight: 500;
+        }
+        .notification.success { background: var(--secondary); }
+        .notification.error { background: var(--danger); }
+        .notification.info { background: var(--primary); }
+
+        .gist-item.deleting { opacity: 0.6; pointer-events: none; }
+        .gist-item .fa-spin { animation: fa-spin 2s infinite linear; }
+
+        .github-msg { font-size: 0.85rem; margin-top: 8px; font-weight: 500; }
+
         @media (max-width: 768px) {
             .header-content { flex-direction: column; text-align: center; }
             .logo { justify-content: center; margin-bottom: 15px; }
@@ -133,7 +173,6 @@
             .action-buttons { flex-direction: column; }
         }
 
-        /* Estilos morados específicos para la pantalla de Ayto integrada */
         .ayto-header { background: linear-gradient(135deg, var(--ayto-color), #b84ccf); color: white; padding: 30px 0; text-align: center; border-radius: 10px; box-shadow: var(--shadow); margin-bottom: 30px; }
         .ayto-title { font-size: 2.0rem; margin-bottom: 10px; }
         .ayto-subtitle { font-size: 1.1rem; opacity: 0.95; }
@@ -150,13 +189,28 @@
         .ayto-activities-list li { margin-bottom: 8px; padding-left: 20px; position: relative; }
         .ayto-activities-list li:before { content: "•"; color: var(--ayto-color); font-weight: bold; position: absolute; left: 0; }
         .ayto-footer { text-align: center; margin-top: 40px; padding: 20px; color: #666; font-size: 0.9rem; }
-        @media (max-width: 768px) {
-            .ayto-project-btn { min-width: 100%; }
-            .ayto-title { font-size: 1.8rem; }
-        }
     </style>
 </head>
 <body>
+
+    <!-- BLOQUEADOR DE INTERFAZ (carga/operaciones GitHub) -->
+    <div id="interface-blocker" class="interface-blocker">
+        <div class="spinner"></div>
+        <div id="loading-message">Cargando datos desde GitHub...</div>
+        <div class="small text-muted mt-2">Por favor, espera</div>
+    </div>
+
+    <!-- INDICADOR DE ÚLTIMA ACTUALIZACIÓN -->
+    <div id="last-update-indicator" class="last-update-indicator hidden">
+        <i class="fas fa-clock"></i>
+        <span id="last-update-text"></span>
+    </div>
+
+    <!-- ÁREA DE NOTIFICACIONES FLOTANTES -->
+    <div id="notification-area" class="notification-area hidden">
+        <div id="notification-msg" class="notification"></div>
+    </div>
+
     <header>
         <div class="container">
             <div class="header-content">
@@ -164,10 +218,14 @@
                     <i class="fas fa-graduation-cap"></i>
                     <div>
                         <h1>Programas Educativos (IES Virgen de Villadiego)</h1>
-						<h2>Versión Equipo Directivo</h2>
+                        <h2>Versión Equipo Directivo</h2>
                         <div class="logo-subtitle">Consejería de Desarrollo Educativo y Formación Profesional - Junta de Andalucía</div>
                         <div id="course-subtitle" class="course-subtitle">Curso 2025-2026</div>
                     </div>
+                </div>
+                <!-- ESTADO DE AUTENTICACIÓN GITHUB -->
+                <div id="auth-status" class="badge bg-dark">
+                    <i class="fas fa-cloud"></i> Modo Local
                 </div>
                 <nav id="main-nav">
                     <button class="nav-btn active" data-page="home">
@@ -185,6 +243,7 @@
     </header>
 
     <div class="container">
+        <!-- PÁGINA DE INICIO -->
         <div id="home" class="page active">
             <h2 class="page-title"><i class="fas fa-home"></i> Portal de Programas Educativos</h2>
             <p>Seleccione el tipo de programa para gestionar la participación del IES:</p>
@@ -248,7 +307,42 @@
 
             <div class="collapsible">
                 <div class="collapsible-header">
-                    <span><i class="fas fa-file-export"></i> Exportar/Importar Datos</span>
+                    <span><i class="fab fa-github"></i> Nube (GitHub) - Copias de Seguridad</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="collapsible-content">
+                    <div class="github-section">
+                        <div class="form-group">
+                            <label for="github-token">Personal Access Token (Classic) de GitHub</label>
+                            <input type="password" id="github-token" class="form-control" placeholder="ghp_xxxxxxxxxxxx...">
+                            <div class="token-file-upload">
+                                <label for="token-file-input" class="btn btn-secondary btn-sm" style="background: var(--gray);">
+                                    <i class="fas fa-upload"></i> Cargar token desde archivo .txt
+                                </label>
+                                <input type="file" id="token-file-input" accept=".txt" style="display: none;">
+                                <span id="token-file-name" class="small text-muted">Ningún archivo seleccionado</span>
+                            </div>
+                            <div id="github-msg" class="github-msg text-secondary">Token no configurado.</div>
+                        </div>
+                        <div class="action-buttons">
+                            <button id="validate-token-btn" class="action-btn export-btn" style="background: #24292e;">
+                                <i class="fas fa-check-circle"></i> Validar y Guardar Token
+                            </button>
+                            <button id="save-to-github" class="action-btn export-btn" style="background: #24292e;">
+                                <i class="fab fa-github"></i> Guardar en GitHub
+                            </button>
+                            <button id="load-from-github" class="action-btn import-btn" style="background: #24292e;">
+                                <i class="fab fa-github"></i> Cargar desde GitHub
+                            </button>
+                        </div>
+                        <div id="gist-list" class="gist-list" style="display: none;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="collapsible">
+                <div class="collapsible-header">
+                    <span><i class="fas fa-file-export"></i> Exportar/Importar Local</span>
                     <i class="fas fa-chevron-down"></i>
                 </div>
                 <div class="collapsible-content">
@@ -262,22 +356,6 @@
                         </button>
                     </div>
                     <input type="file" id="import-file" accept=".json" style="display: none;">
-                    
-                    <div class="github-section">
-                        <div class="form-group">
-                            <label for="github-token">Token de GitHub (para guardar en la nube)</label>
-                            <input type="password" id="github-token" class="form-control" placeholder="Introduzca su token personal de GitHub">
-                        </div>
-                        <div class="action-buttons">
-                            <button class="action-btn export-btn" id="save-to-github">
-                                <i class="fab fa-github"></i> Guardar en GitHub Gist
-                            </button>
-                            <button class="action-btn import-btn" id="load-from-github">
-                                <i class="fab fa-github"></i> Cargar desde GitHub Gist
-                            </button>
-                        </div>
-                        <div id="gist-list" class="gist-list" style="display: none;"></div>
-                    </div>
                 </div>
             </div>
 
@@ -300,6 +378,7 @@
             </div>
         </div>
 
+        <!-- PÁGINAS DE PROGRAMAS POR TIPO -->
         <div id="type-a" class="page">
             <button class="back-btn" data-page="home">
                 <i class="fas fa-arrow-left"></i> Volver al Inicio
@@ -324,19 +403,18 @@
             <div class="programs-grid" id="programs-type-c"></div>
         </div>
         
+        <!-- PÁGINA DE PROYECTOS DEL AYUNTAMIENTO (contenido completo) -->
         <div id="ayto-projects" class="page">
             <button class="back-btn" data-page="home">
                 <i class="fas fa-arrow-left"></i> Volver al Inicio
             </button>
             <h2 class="page-title"><i class="fas fa-city"></i> Proyectos del Ayuntamiento</h2>
-
             <div class="ayto-header">
                 <div class="container">
                     <h1 class="ayto-title">Proyectos en colaboración con el Área de Juventud del Ayuntamiento de Peñaflor</h1>
                     <p class="ayto-subtitle">Curso <span id="ayto-course-subtitle">2025/2026</span></p>
                 </div>
             </div>
-
             <div class="container">
                 <div class="ayto-buttons-container">
                     <button class="ayto-project-btn active" data-project="alfabetizacion">Alfabetización Mediática</button>
@@ -492,7 +570,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="ayto-footer">
                 <div class="container">
                     <p>Proyectos en colaboración con el Área de Juventud del Ayuntamiento de Peñaflor - Curso <span id="ayto-footer-course">2025/2026</span></p>
@@ -501,7 +578,70 @@
         </div>
     </div>
 
-    <!-- Modal coordinador más estético -->
+    <!-- MODAL: LISTA DE GISTS PARA RESTAURAR -->
+    <div id="modal-github-list" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><span class="title-icon"><i class="fab fa-github"></i></span> Copias de seguridad</h3>
+                <button class="close-btn" id="close-github-list-modal">Cerrar</button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="p-3 bg-light border-bottom small text-secondary">Selecciona la versión que deseas restaurar:</div>
+                <ul id="github-file-list" class="list-group" style="list-style: none; margin: 0; padding: 0; max-height: 300px; overflow-y: auto;"></ul>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeGistListModal()">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: OPCIONES DE GUARDADO -->
+    <div id="save-options-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header" style="background: var(--primary);">
+                <h3 class="modal-title"><span class="title-icon"><i class="fas fa-cloud-upload-alt"></i></span> Opciones de guardado</h3>
+                <button class="close-btn" onclick="document.getElementById('save-options-modal').classList.remove('active')">Cerrar</button>
+            </div>
+            <div class="modal-body">
+                <p class="mb-4">Se han encontrado <span id="found-backups-count">0</span> copias de seguridad existentes. ¿Qué deseas hacer?</p>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <button id="save-option-overwrite" class="btn btn-primary" style="justify-content: flex-start; text-align: left;">
+                        <i class="fas fa-save"></i> <strong>Sobrescribir última copia</strong><br>
+                        <small>Actualizará la copia más reciente</small>
+                    </button>
+                    <button id="save-option-overwrite-selected" class="btn btn-warning" style="justify-content: flex-start; text-align: left;">
+                        <i class="fas fa-edit"></i> <strong>Seleccionar copia para sobrescribir</strong><br>
+                        <small>Elegirás qué copia actualizar</small>
+                    </button>
+                    <button id="save-option-new" class="btn btn-success" style="justify-content: flex-start; text-align: left;">
+                        <i class="fas fa-plus-circle"></i> <strong>Crear nueva copia</strong><br>
+                        <small>Generarás una copia nueva (seguirán existiendo las anteriores)</small>
+                    </button>
+                    <button id="save-option-cancel" class="btn btn-outline-secondary mt-3">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: SELECCIÓN DE GIST PARA SOBRESCRIBIR -->
+    <div id="gist-selection-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header" style="background: #ff9800;">
+                <h3 class="modal-title"><span class="title-icon"><i class="fas fa-list"></i></span> Seleccionar copia para sobrescribir</h3>
+                <button class="close-btn" onclick="document.getElementById('gist-selection-modal').classList.remove('active')">Cerrar</button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="p-3 bg-light border-bottom small text-secondary">Selecciona la copia que deseas sobrescribir (se perderán los datos antiguos):</div>
+                <div id="gist-selection-list" style="max-height: 300px; overflow-y: auto;"></div>
+            </div>
+            <div class="modal-actions">
+                <span id="gist-count" class="small text-muted me-auto">0 copias</span>
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('gist-selection-modal').classList.remove('active')">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL COORDINADOR -->
     <div id="coordinator-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -559,6 +699,27 @@
     </footer>
 
     <script>
+        // ================================================
+        // CONFIGURACIÓN GLOBAL Y CONSTANTES
+        // ================================================
+        const GIST_FILENAME = 'programas_educativos_datos.json';
+        const GIST_DESC = 'Programas Educativos IES - Datos';
+        
+        // Estado de la aplicación
+        let appState = {
+            participation: {},
+            githubToken: localStorage.getItem('githubToken') || '',
+            selectedCourse: '',
+            teachers: []
+        };
+
+        // Variables para GitHub
+        let autoSaveInterval = null;
+        let lastAutoSaveTime = null;
+        let isLoadingFromGitHub = false;
+        let currentGists = [];
+
+        // Datos de los programas
         const programsData = {
             'type-a': [
                 { id: 'a1', name: 'Bienestar Emocional', url: 'https://www.juntadeandalucia.es/educacion/portales/web/planes-y-programas/programas-desarrollo-educativo/bienestar-emocional/presentacion' },
@@ -600,22 +761,7 @@
                 { id: 'c17', name: 'PicassoMob', url: 'https://www.juntadeandalucia.es/educacion/portales/web/programas-educativos-internacionales/ensenanza-bilingue/actuaciones-con-francia/picasso-mob' },
                 { id: 'c18', name: 'Aulas Confucio', url: 'https://www.juntadeandalucia.es/educacion/portales/web/programas-educativos-internacionales/otros-programas/aulas-confucio' },
                 { id: 'c19', name: 'Programa de Intercambios Escolares', url: 'https://www.juntadeandalucia.es/educacion/portales/web/programas-educativos-internacionales/otros-programas/intercambios-escolares' }
-            ],
-            'ayto-projects': []
-        };
-        
-        function getCurrentCourse() {
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = today.getMonth() + 1;
-            return month >= 9 ? `${year}-${year + 1}` : `${year - 1}-${year}`;
-        }
-
-        let appState = {
-            participation: {},
-            githubToken: '',
-            selectedCourse: getCurrentCourse(),
-            teachers: []
+            ]
         };
 
         const programIndex = {};
@@ -623,36 +769,577 @@
             programsData[type].forEach(p => { programIndex[p.id] = p; });
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            loadSavedData();
-            initNavigation();
-            initPrograms();
-            initEvents();
-            initCollapsibles();
-            setupClearDataButton();
-            initAytoTab();
+        // ================================================
+        // FUNCIONES DE UTILIDAD (timestamp, notificaciones, bloqueo)
+        // ================================================
+        function getCurrentCourse() {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = today.getMonth() + 1;
+            return month >= 9 ? `${year}-${year + 1}` : `${year - 1}-${year}`;
+        }
 
-            // Sincroniza curso en cabecera, dossier y ayto
-            const dossierCourseEl = document.getElementById('dossier-course');
-            if (dossierCourseEl) dossierCourseEl.textContent = appState.selectedCourse || getCurrentCourse();
-            syncAytoCourse();
-        });
+        function getTimestamp() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            return `${year}-${month}-${day} ${hours}-${minutes}-${seconds}`;
+        }
 
-        function initNavigation() {
-            const navButtons = document.querySelectorAll('.nav-btn, .back-btn');
-            const headerNavButtons = document.querySelectorAll('header .nav-btn');
-            navButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    const targetPage = this.getAttribute('data-page');
-                    if (!targetPage) return;
-                    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
-                    const targetEl = document.getElementById(targetPage);
-                    if (targetEl) targetEl.classList.add('active');
-                    headerNavButtons.forEach(btn => btn.classList.remove('active'));
-                    const headerBtn = document.querySelector(`header .nav-btn[data-page="${targetPage}"]`);
-                    if (headerBtn) headerBtn.classList.add('active');
-                });
+        function showNotification(msg, type = 'success') {
+            if (isLoadingFromGitHub && type !== 'error') return;
+            const area = document.getElementById('notification-area');
+            const box = document.getElementById('notification-msg');
+            box.textContent = msg;
+            box.className = 'notification';
+            if (type === 'error') box.classList.add('error');
+            else if (type === 'info') box.classList.add('info');
+            else box.classList.add('success');
+            area.classList.remove('hidden');
+            setTimeout(() => area.classList.add('hidden'), 3000);
+        }
+
+        function blockInterface(message = 'Cargando datos desde GitHub...') {
+            const blocker = document.getElementById('interface-blocker');
+            document.getElementById('loading-message').textContent = message;
+            blocker.style.display = 'flex';
+            isLoadingFromGitHub = true;
+            document.querySelectorAll('button, input, select, .nav-btn, .back-btn').forEach(el => {
+                if (el) { el.disabled = true; el.style.pointerEvents = 'none'; el.style.opacity = '0.6'; }
             });
+        }
+
+        function unblockInterface() {
+            const blocker = document.getElementById('interface-blocker');
+            blocker.style.display = 'none';
+            isLoadingFromGitHub = false;
+            document.querySelectorAll('button, input, select, .nav-btn, .back-btn').forEach(el => {
+                if (el) { el.disabled = false; el.style.pointerEvents = ''; el.style.opacity = ''; }
+            });
+        }
+
+        function saveLastUpdate(source) {
+            const updateData = { timestamp: new Date().toISOString(), source };
+            localStorage.setItem('lastUpdate', JSON.stringify(updateData));
+            showLastUpdateIndicator();
+        }
+
+        function showLastUpdateIndicator() {
+            const lastUpdate = localStorage.getItem('lastUpdate');
+            if (!lastUpdate) return;
+            try {
+                const data = JSON.parse(lastUpdate);
+                const date = new Date(data.timestamp);
+                const formatted = date.toLocaleString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+                const source = data.source === 'github' ? 'GitHub' : 'Local';
+                document.getElementById('last-update-text').textContent = `Última actualización: ${formatted} (${source})`;
+                document.getElementById('last-update-indicator').classList.remove('hidden');
+                setTimeout(() => {
+                    const el = document.getElementById('last-update-indicator');
+                    el.classList.add('fade-out');
+                    setTimeout(() => { el.classList.add('hidden'); el.classList.remove('fade-out'); }, 500);
+                }, 8000);
+            } catch (e) {}
+        }
+
+        // ================================================
+        // FUNCIONES COLLAPSIBLES (reparadas)
+        // ================================================
+        function initCollapsibles() {
+            const collapsibles = document.querySelectorAll('.collapsible');
+            collapsibles.forEach(collapsible => {
+                const header = collapsible.querySelector('.collapsible-header');
+                // Eliminar listeners previos para evitar duplicados
+                header.removeEventListener('click', toggleCollapsible);
+                header.addEventListener('click', toggleCollapsible);
+            });
+        }
+
+        function toggleCollapsible(e) {
+            const collapsible = e.currentTarget.closest('.collapsible');
+            collapsible.classList.toggle('active');
+            const icon = e.currentTarget.querySelector('.fa-chevron-down, .fa-chevron-up');
+            if (icon) {
+                if (collapsible.classList.contains('active')) {
+                    icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
+                } else {
+                    icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
+                }
+            }
+        }
+
+        // ================================================
+        // FUNCIONES DE GESTIÓN DE GITHUB
+        // ================================================
+        async function updateAuthStatusFromToken() {
+            if (!appState.githubToken) return;
+            try {
+                const res = await fetch('https://api.github.com/user', {
+                    headers: { 'Authorization': `token ${appState.githubToken}`, 'Accept': 'application/vnd.github.v3+json' }
+                });
+                if (!res.ok) throw new Error('Token inválido');
+                const user = await res.json();
+                updateAuthStatus(true, user.login);
+                document.getElementById('github-msg').innerHTML = `<span class="text-success">Token válido. Usuario: ${user.login}</span>`;
+                startAutoSave();
+            } catch (e) {
+                console.error(e);
+                updateAuthStatus(false, 'Token inválido');
+                document.getElementById('github-msg').innerHTML = `<span class="text-danger">Token inválido o sin permisos</span>`;
+                stopAutoSave();
+            }
+        }
+
+        function updateAuthStatus(isConnected, userLogin) {
+            const el = document.getElementById('auth-status');
+            if (isConnected) {
+                el.innerHTML = `<i class="fab fa-github"></i> Conectado (${userLogin})`;
+                el.style.background = 'rgba(40, 167, 69, 0.9)';
+                el.style.color = 'white';
+            } else {
+                el.innerHTML = `<i class="fas fa-cloud"></i> Modo Local`;
+                el.style.background = 'rgba(0,0,0,0.3)';
+                el.style.color = 'white';
+            }
+        }
+
+        async function saveGithubToken() {
+            if (isLoadingFromGitHub) { showNotification('Ya se está cargando desde GitHub', 'info'); return; }
+            const t = document.getElementById('github-token').value.trim();
+            if (!t) return alert('Introduce un token válido');
+            showNotification('Validando token...', 'info');
+            try {
+                const res = await fetch('https://api.github.com/user', {
+                    headers: { 'Authorization': `token ${t}`, 'Accept': 'application/vnd.github.v3+json' }
+                });
+                if (!res.ok) throw new Error('Token inválido');
+                const user = await res.json();
+                appState.githubToken = t;
+                localStorage.setItem('githubToken', t);
+                updateAuthStatus(true, user.login);
+                document.getElementById('github-msg').innerHTML = `<span class="text-success">Token válido. Usuario: ${user.login}</span>`;
+                showNotification(`Token válido. Conectado como ${user.login}`);
+                startAutoSave();
+                // Carga automática de la última copia
+                await loadLatestFromGitHubAuto();
+            } catch (e) {
+                console.error(e);
+                updateAuthStatus(false, 'Token inválido');
+                document.getElementById('github-msg').innerHTML = `<span class="text-danger">Error: ${e.message}</span>`;
+                stopAutoSave();
+            }
+        }
+
+        async function loadLatestFromGitHubAuto() {
+            if (!appState.githubToken) return false;
+            blockInterface('Buscando última versión en GitHub...');
+            try {
+                const listResp = await fetch('https://api.github.com/gists', {
+                    headers: { 'Authorization': `token ${appState.githubToken}` }
+                });
+                if (!listResp.ok) throw new Error('Error al conectar con GitHub');
+                const gists = await listResp.json();
+                // ✅ FILTRO ESTRICTO: solo gists que contienen el archivo exacto
+                let relevantGists = gists.filter(g => g.files && g.files[GIST_FILENAME]);
+                if (relevantGists.length === 0) {
+                    showNotification('No hay copias guardadas en GitHub. Comenzando con datos locales.', 'info');
+                    return false;
+                }
+                // Ordenar por fecha (más reciente primero)
+                relevantGists.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+                const latestGist = relevantGists[0];
+                const gistResp = await fetch(`https://api.github.com/gists/${latestGist.id}`, {
+                    headers: { 'Authorization': `token ${appState.githubToken}` }
+                });
+                if (!gistResp.ok) throw new Error('Error al descargar el gist');
+                const fullGist = await gistResp.json();
+                const targetFile = fullGist.files[GIST_FILENAME];
+                if (!targetFile) throw new Error(`Archivo ${GIST_FILENAME} no encontrado en el gist.`);
+                const data = JSON.parse(targetFile.content);
+                if (data.participation !== undefined && data.teachers !== undefined) {
+                    appState.participation = data.participation || {};
+                    appState.teachers = data.teachers || [];
+                    appState.selectedCourse = data.selectedCourse || getCurrentCourse();
+                    localStorage.setItem('programsAppData', JSON.stringify(appState));
+                    updateTeacherSelectors();
+                    initPrograms(); // refresca toda la UI
+                    saveLastUpdate('github');
+                    showNotification('Datos cargados desde GitHub correctamente');
+                    return true;
+                }
+            } catch (e) {
+                console.error('Error en carga automática:', e);
+                showNotification('Error al cargar desde GitHub: ' + e.message, 'error');
+            } finally {
+                unblockInterface();
+            }
+            return false;
+        }
+
+        function startAutoSave() {
+            if (autoSaveInterval) clearInterval(autoSaveInterval);
+            if (appState.githubToken) {
+                console.log('Guardado automático activado (cada 5 minutos)');
+                setTimeout(() => autoSaveGitHub(), 30000);
+                autoSaveInterval = setInterval(autoSaveGitHub, 5 * 60 * 1000);
+            }
+        }
+
+        function stopAutoSave() {
+            if (autoSaveInterval) { clearInterval(autoSaveInterval); autoSaveInterval = null; }
+        }
+
+        async function autoSaveGitHub() {
+            if (!appState.githubToken) return;
+            if (appState.teachers.length === 0 && Object.keys(appState.participation).length === 0) return;
+            if (lastAutoSaveTime && (Date.now() - lastAutoSaveTime < 2 * 60 * 1000)) return;
+            try {
+                const listResp = await fetch('https://api.github.com/gists', {
+                    headers: { 'Authorization': `token ${appState.githubToken}` }
+                });
+                if (!listResp.ok) return;
+                const gists = await listResp.json();
+                const relevantGists = gists.filter(g => g.files && g.files[GIST_FILENAME]);
+                let existingGistId = null;
+                if (relevantGists.length > 0) {
+                    relevantGists.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+                    existingGistId = relevantGists[0].id;
+                }
+                const content = JSON.stringify({
+                    participation: appState.participation,
+                    teachers: appState.teachers,
+                    selectedCourse: appState.selectedCourse
+                }, null, 2);
+                const timestamp = new Date().toLocaleString('es-ES');
+                if (existingGistId) {
+                    const body = {
+                        description: `${GIST_DESC} - ${timestamp} (Auto-saved)`,
+                        files: { [GIST_FILENAME]: { content } }
+                    };
+                    await fetch(`https://api.github.com/gists/${existingGistId}`, {
+                        method: 'PATCH',
+                        headers: { 'Authorization': `token ${appState.githubToken}` },
+                        body: JSON.stringify(body)
+                    });
+                } else {
+                    const body = {
+                        description: `${GIST_DESC} - ${timestamp} (Auto-saved)`,
+                        public: false,
+                        files: { [GIST_FILENAME]: { content } }
+                    };
+                    await fetch('https://api.github.com/gists', {
+                        method: 'POST',
+                        headers: { 'Authorization': `token ${appState.githubToken}` },
+                        body: JSON.stringify(body)
+                    });
+                }
+                lastAutoSaveTime = Date.now();
+                saveLastUpdate('github');
+            } catch (e) {
+                console.error('Guardado automático falló:', e);
+            }
+        }
+
+        // ================================================
+        // FUNCIONES DE GUARDADO / CARGADO MANUAL
+        // ================================================
+        async function saveToGitHub() {
+            if (!appState.githubToken) return alert('Primero configura tu Token.');
+            if (isLoadingFromGitHub) { showNotification('Espera a que termine la carga', 'info'); return; }
+            try {
+                showNotification('Conectando con GitHub...', 'info');
+                const listResp = await fetch('https://api.github.com/gists', {
+                    headers: { 'Authorization': `token ${appState.githubToken}` }
+                });
+                if (!listResp.ok) throw new Error(`Error al conectar: ${listResp.status}`);
+                const gists = await listResp.json();
+                const relevantGists = gists.filter(g => g.files && g.files[GIST_FILENAME]);
+                document.getElementById('found-backups-count').textContent = relevantGists.length;
+                const modal = document.getElementById('save-options-modal');
+                modal.classList.add('active');
+
+                document.getElementById('save-option-overwrite').onclick = () => handleSaveOption('overwrite');
+                document.getElementById('save-option-overwrite-selected').onclick = () => handleSaveOption('overwrite_selected', relevantGists);
+                document.getElementById('save-option-new').onclick = () => handleSaveOption('new');
+                document.getElementById('save-option-cancel').onclick = () => modal.classList.remove('active');
+            } catch (e) {
+                console.error(e);
+                showNotification(e.message, 'error');
+            }
+        }
+
+        async function handleSaveOption(option, gists = null) {
+            document.getElementById('save-options-modal').classList.remove('active');
+            const content = JSON.stringify({
+                participation: appState.participation,
+                teachers: appState.teachers,
+                selectedCourse: appState.selectedCourse
+            }, null, 2);
+            const timestamp = new Date().toLocaleString('es-ES');
+
+            try {
+                if (option === 'overwrite') {
+                    const listResp = await fetch('https://api.github.com/gists', {
+                        headers: { 'Authorization': `token ${appState.githubToken}` }
+                    });
+                    const gistsList = await listResp.json();
+                    const relevant = gistsList.filter(g => g.files && g.files[GIST_FILENAME]);
+                    relevant.sort((a,b) => new Date(b.updated_at) - new Date(a.updated_at));
+                    const gistId = relevant[0]?.id;
+                    if (!gistId) throw new Error('No hay copia para sobrescribir');
+                    const body = {
+                        description: `${GIST_DESC} - ${timestamp} (Sobrescrito)`,
+                        files: { [GIST_FILENAME]: { content } }
+                    };
+                    await fetch(`https://api.github.com/gists/${gistId}`, {
+                        method: 'PATCH',
+                        headers: { 'Authorization': `token ${appState.githubToken}` },
+                        body: JSON.stringify(body)
+                    });
+                    showNotification('¡Copia sobrescrita en GitHub!');
+                } else if (option === 'overwrite_selected') {
+                    if (!gists) {
+                        const listResp = await fetch('https://api.github.com/gists', {
+                            headers: { 'Authorization': `token ${appState.githubToken}` }
+                        });
+                        gists = (await listResp.json()).filter(g => g.files && g.files[GIST_FILENAME]);
+                    }
+                    showGistSelectionModal(gists);
+                    return;
+                } else if (option === 'new') {
+                    const body = {
+                        description: `${GIST_DESC} - ${timestamp}`,
+                        public: false,
+                        files: { [GIST_FILENAME]: { content } }
+                    };
+                    await fetch('https://api.github.com/gists', {
+                        method: 'POST',
+                        headers: { 'Authorization': `token ${appState.githubToken}` },
+                        body: JSON.stringify(body)
+                    });
+                    showNotification('¡Nueva copia creada en GitHub!');
+                }
+                lastAutoSaveTime = Date.now();
+                saveLastUpdate('github');
+            } catch (e) {
+                console.error(e);
+                showNotification(e.message, 'error');
+            }
+        }
+
+        function showGistSelectionModal(gists) {
+            const modal = document.getElementById('gist-selection-modal');
+            const container = document.getElementById('gist-selection-list');
+            container.innerHTML = '';
+            gists.sort((a,b) => new Date(b.updated_at) - new Date(a.updated_at));
+            document.getElementById('gist-count').textContent = gists.length;
+            gists.forEach((gist, index) => {
+                const date = new Date(gist.updated_at).toLocaleString('es-ES');
+                const desc = gist.description || '(Sin descripción)';
+                const item = document.createElement('div');
+                item.className = 'gist-item';
+                item.style.cssText = 'display: flex; align-items: center; padding: 12px; border-bottom: 1px solid #eee; cursor: pointer;';
+                item.innerHTML = `
+                    <div style="flex:1">
+                        <div><strong>${desc}</strong></div>
+                        <div class="small text-muted"><i class="fas fa-clock"></i> ${date}</div>
+                    </div>
+                    <div>
+                        <input type="radio" name="selectedGist" value="${gist.id}" ${index === 0 ? 'checked' : ''}>
+                    </div>
+                `;
+                item.addEventListener('click', (e) => {
+                    if (e.target.tagName !== 'INPUT') {
+                        const radio = item.querySelector('input[type="radio"]');
+                        radio.checked = true;
+                    }
+                });
+                container.appendChild(item);
+            });
+            const confirmBtn = document.createElement('button');
+            confirmBtn.className = 'btn btn-warning w-100 rounded-0 border-0';
+            confirmBtn.innerHTML = '<i class="fas fa-save"></i> Sobrescribir copia seleccionada';
+            confirmBtn.onclick = async () => {
+                const selected = document.querySelector('input[name="selectedGist"]:checked');
+                if (!selected) { alert('Selecciona una copia'); return; }
+                modal.classList.remove('active');
+                try {
+                    showNotification('Sobrescribiendo copia...', 'info');
+                    const content = JSON.stringify({
+                        participation: appState.participation,
+                        teachers: appState.teachers,
+                        selectedCourse: appState.selectedCourse
+                    }, null, 2);
+                    const timestamp = new Date().toLocaleString('es-ES');
+                    const body = {
+                        description: `${GIST_DESC} - ${timestamp} (Sobrescrito)`,
+                        files: { [GIST_FILENAME]: { content } }
+                    };
+                    await fetch(`https://api.github.com/gists/${selected.value}`, {
+                        method: 'PATCH',
+                        headers: { 'Authorization': `token ${appState.githubToken}` },
+                        body: JSON.stringify(body)
+                    });
+                    showNotification('¡Copia sobrescrita en GitHub!');
+                    saveLastUpdate('github');
+                    lastAutoSaveTime = Date.now();
+                } catch (e) {
+                    showNotification(e.message, 'error');
+                }
+            };
+            container.appendChild(confirmBtn);
+            modal.classList.add('active');
+        }
+
+        async function loadFromGitHub() {
+            if (!appState.githubToken) return alert('Configura tu Token primero.');
+            if (isLoadingFromGitHub) { showNotification('Ya se está cargando...', 'info'); return; }
+            try {
+                showNotification('Consultando GitHub...', 'info');
+                const listResp = await fetch('https://api.github.com/gists', {
+                    headers: { 'Authorization': `token ${appState.githubToken}` }
+                });
+                if (!listResp.ok) throw new Error('Error al conectar con GitHub.');
+                const gists = await listResp.json();
+                const relevantGists = gists.filter(g => g.files && g.files[GIST_FILENAME]);
+                if (relevantGists.length === 0) throw new Error('No se encontraron copias.');
+                currentGists = relevantGists;
+                renderGistList(relevantGists);
+                document.getElementById('modal-github-list').classList.add('active');
+            } catch (e) {
+                console.error(e);
+                showNotification(e.message, 'error');
+            }
+        }
+
+        function renderGistList(gists) {
+            const container = document.getElementById('github-file-list');
+            container.innerHTML = '';
+            gists.sort((a,b) => new Date(b.updated_at) - new Date(a.updated_at));
+            gists.forEach((gist, index) => {
+                const date = new Date(gist.updated_at).toLocaleString('es-ES');
+                const desc = gist.description || '(Sin descripción)';
+                const li = document.createElement('li');
+                li.className = 'gist-item';
+                li.id = `gist-item-${gist.id}`;
+                li.innerHTML = `
+                    <div style="flex:1; cursor: pointer;" onclick="loadSpecificGist('${gist.id}')">
+                        <div><strong>${desc}</strong></div>
+                        <div class="small text-muted"><i class="fas fa-clock"></i> ${date}</div>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm btn-outline-danger delete-gist-btn" onclick="event.stopPropagation(); deleteGist('${gist.id}', ${index})">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(li);
+            });
+        }
+
+        window.loadSpecificGist = async function(gistId) {
+            if (isLoadingFromGitHub) { showNotification('Ya se está cargando...', 'info'); return; }
+            blockInterface('Cargando copia específica...');
+            document.getElementById('modal-github-list').classList.remove('active');
+            try {
+                const gistResp = await fetch(`https://api.github.com/gists/${gistId}`, {
+                    headers: { 'Authorization': `token ${appState.githubToken}` }
+                });
+                if (!gistResp.ok) throw new Error('Error al descargar.');
+                const fullGist = await gistResp.json();
+                const targetFile = fullGist.files[GIST_FILENAME];
+                if (!targetFile) throw new Error(`Archivo ${GIST_FILENAME} no encontrado.`);
+                const data = JSON.parse(targetFile.content);
+                if (data.participation !== undefined && data.teachers !== undefined) {
+                    appState.participation = data.participation || {};
+                    appState.teachers = data.teachers || [];
+                    appState.selectedCourse = data.selectedCourse || getCurrentCourse();
+                    localStorage.setItem('programsAppData', JSON.stringify(appState));
+                    updateTeacherSelectors();
+                    initPrograms();
+                    showNotification('¡Restaurado correctamente!');
+                    saveLastUpdate('github');
+                } else throw new Error('Formato incorrecto.');
+            } catch (e) {
+                console.error(e);
+                showNotification(e.message, 'error');
+            } finally {
+                unblockInterface();
+            }
+        };
+
+        window.deleteGist = async function(gistId, index) {
+            const gistItem = document.getElementById(`gist-item-${gistId}`);
+            if (!gistItem) return;
+            const desc = currentGists[index]?.description || '(Sin descripción)';
+            if (!confirm(`¿Eliminar permanentemente esta copia?\n\n"${desc}"\n\nEsta acción no se puede deshacer.`)) return;
+            if (!appState.githubToken) { showNotification('Error: Token no configurado', 'error'); return; }
+            gistItem.classList.add('deleting');
+            const btn = gistItem.querySelector('.delete-gist-btn');
+            if (btn) btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+            try {
+                const deleteResp = await fetch(`https://api.github.com/gists/${gistId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `token ${appState.githubToken}` }
+                });
+                if (!deleteResp.ok) throw new Error(`Error al eliminar: ${deleteResp.status}`);
+                currentGists.splice(index, 1);
+                gistItem.remove();
+                if (currentGists.length === 0) {
+                    document.getElementById('github-file-list').innerHTML = '<div class="p-3 text-muted text-center">No hay copias</div>';
+                }
+                showNotification('Copia eliminada correctamente');
+            } catch (e) {
+                console.error(e);
+                showNotification(e.message, 'error');
+                gistItem.classList.remove('deleting');
+                if (btn) btn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+            }
+        };
+
+        window.closeGistListModal = function() {
+            document.getElementById('modal-github-list').classList.remove('active');
+        };
+
+        // ================================================
+        // FUNCIONES DE LA APLICACIÓN PRINCIPAL
+        // ================================================
+        function loadSavedData() {
+            const savedData = localStorage.getItem('programsAppData');
+            if (savedData) {
+                try {
+                    const parsed = JSON.parse(savedData);
+                    appState = {
+                        participation: parsed.participation || {},
+                        githubToken: parsed.githubToken || localStorage.getItem('githubToken') || '',
+                        selectedCourse: parsed.selectedCourse || getCurrentCourse(),
+                        teachers: parsed.teachers || []
+                    };
+                } catch (e) { console.warn('Error al cargar datos guardados'); }
+            }
+            if (!appState.selectedCourse) appState.selectedCourse = getCurrentCourse();
+            document.getElementById('course-select').value = appState.selectedCourse;
+            document.getElementById('course-subtitle').textContent = `Curso ${appState.selectedCourse}`;
+            const dossierCourseEl = document.getElementById('dossier-course');
+            if (dossierCourseEl) dossierCourseEl.textContent = appState.selectedCourse;
+            syncAytoCourse();
+            if (appState.teachers.length > 0) updateTeacherSelectors();
+        }
+
+        function saveData() {
+            localStorage.setItem('programsAppData', JSON.stringify(appState));
+        }
+
+        function syncAytoCourse() {
+            const aytoCourseEl = document.getElementById('ayto-course-subtitle');
+            const aytoFooterCourseEl = document.getElementById('ayto-footer-course');
+            const selected = appState.selectedCourse || getCurrentCourse();
+            if (aytoCourseEl) aytoCourseEl.textContent = selected.replace('-', '/');
+            if (aytoFooterCourseEl) aytoFooterCourseEl.textContent = selected.replace('-', '/');
         }
 
         function initPrograms() {
@@ -702,7 +1389,6 @@
                     const coordinatorBtn = document.getElementById(`coordinator-${program.id}`);
                     const coordLabel = document.getElementById(`coord-${program.id}`);
 
-                    // Garantiza estado inicial correcto del botón y etiqueta
                     if (participation.participates) {
                         coordinatorBtn.style.display = 'block';
                         if (participation.coordinator) {
@@ -716,11 +1402,8 @@
                         handleParticipationChange(program.id, this.checked);
                         if (this.checked) {
                             coordinatorBtn.style.display = 'block';
-                            validateCoordinatorAssignment(program.id, checkbox);
                         } else {
                             coordinatorBtn.style.display = 'none';
-                            const row = checkbox.closest('.program-card');
-                            row.classList.remove('table-warning', 'table-danger');
                             if (appState.participation[program.id]) {
                                 delete appState.participation[program.id].coordinator;
                             }
@@ -744,19 +1427,6 @@
             if (!appState.participation[programId]) appState.participation[programId] = {};
             appState.participation[programId].participates = participates;
             saveData();
-        }
-
-        function validateCoordinatorAssignment(programId, checkbox) {
-            const participation = appState.participation[programId] || {};
-            if (participation.participates && !participation.coordinator) {
-                const row = checkbox.closest('.program-card');
-                row.classList.add('table-warning');
-                setTimeout(() => {
-                    const programName = programIndex[programId]?.name || programId;
-                    alert(`El programa "${programName}" tiene participación marcada pero no tiene coordinador asignado. Por favor, asigne un coordinador.`);
-                    openCoordinatorModal(programId, programName);
-                }, 300);
-            }
         }
 
         function openCoordinatorModal(programId, programName) {
@@ -785,9 +1455,9 @@
         function initEvents() {
             document.getElementById('close-modal').addEventListener('click', closeCoordinatorModal);
             document.getElementById('cancel-coordinator').addEventListener('click', closeCoordinatorModal);
-
             document.getElementById('close-project-modal').addEventListener('click', closeProjectModal);
             document.getElementById('close-project-btn').addEventListener('click', closeProjectModal);
+            document.getElementById('close-github-list-modal').addEventListener('click', closeGistListModal);
 
             document.getElementById('coordinator-form').addEventListener('submit', function(e) {
                 e.preventDefault();
@@ -813,11 +1483,6 @@
                     coordinatorBtn.classList.add('reassign');
                     coordinatorBtn.style.display = 'block';
                 }
-                const checkbox = document.getElementById(`check-${programId}`);
-                if (checkbox) {
-                    const row = checkbox.closest('.program-card');
-                    row.classList.remove('table-warning', 'table-danger');
-                }
             });
 
             document.getElementById('export-data').addEventListener('click', exportData);
@@ -825,16 +1490,14 @@
                 document.getElementById('import-file').click();
             });
             document.getElementById('import-file').addEventListener('change', importData);
-            document.getElementById('save-to-github').addEventListener('click', saveToGitHub);
-            document.getElementById('load-from-github').addEventListener('click', loadFromGitHub);
             document.getElementById('generate-pdf').addEventListener('click', generatePDF);
             document.getElementById('generate-html').addEventListener('click', generateHTML);
+            document.getElementById('clear-all-data').addEventListener('click', clearAllData);
 
             document.getElementById('github-token').addEventListener('input', function() {
                 appState.githubToken = this.value;
-                saveData();
+                localStorage.setItem('githubToken', this.value);
             });
-
             document.getElementById('course-select').addEventListener('change', function() {
                 appState.selectedCourse = this.value;
                 document.getElementById('course-subtitle').textContent = `Curso ${this.value}`;
@@ -843,51 +1506,52 @@
                 syncAytoCourse();
                 saveData();
             });
-
             document.getElementById('teacher-file').addEventListener('change', handleTeacherFile);
+
+            // Botones de GitHub
+            document.getElementById('validate-token-btn').addEventListener('click', saveGithubToken);
+            document.getElementById('save-to-github').addEventListener('click', saveToGitHub);
+            document.getElementById('load-from-github').addEventListener('click', loadFromGitHub);
         }
 
         function closeCoordinatorModal() { document.getElementById('coordinator-modal').classList.remove('active'); }
         function closeProjectModal() { document.getElementById('project-modal').classList.remove('active'); }
 
-        function initCollapsibles() {
-            const collapsibles = document.querySelectorAll('.collapsible');
-            collapsibles.forEach(collapsible => {
-                const header = collapsible.querySelector('.collapsible-header');
-                header.addEventListener('click', function() {
-                    collapsible.classList.toggle('active');
-                    const icon = this.querySelector('.fa-chevron-down, .fa-chevron-up');
-                    if (!icon) return;
-                    if (collapsible.classList.contains('active')) {
-                        icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
-                    } else {
-                        icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
-                    }
+        function initNavigation() {
+            const navButtons = document.querySelectorAll('.nav-btn, .back-btn');
+            const headerNavButtons = document.querySelectorAll('header .nav-btn');
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetPage = this.getAttribute('data-page');
+                    if (!targetPage) return;
+                    document.querySelectorAll('.page').forEach(page => page.classList.remove('active'));
+                    const targetEl = document.getElementById(targetPage);
+                    if (targetEl) targetEl.classList.add('active');
+                    headerNavButtons.forEach(btn => btn.classList.remove('active'));
+                    const headerBtn = document.querySelector(`header .nav-btn[data-page="${targetPage}"]`);
+                    if (headerBtn) headerBtn.classList.add('active');
                 });
             });
         }
 
-        function setupClearDataButton() {
-            const clearButton = document.getElementById('clear-all-data');
-            if (clearButton) {
-                clearButton.addEventListener('click', function() {
-                    if (confirm('¿ESTÁ SEGURO DE QUE QUIERE ELIMINAR TODOS LOS DATOS?\n\nEsta acción eliminará:\n- Lista completa de profesorado\n- Datos de planes y proyectos\n- Toda la configuración\n\nEsta operación NO se puede deshacer.')) {
-                        localStorage.removeItem('teacherList');
-                        localStorage.removeItem('planData');
-                        localStorage.removeItem('projectData');
-                        localStorage.removeItem('tutorialSeen');
-                        localStorage.removeItem('appSettings');
-                        localStorage.removeItem('programsAppData');
-                        alert('Todos los datos han sido eliminados. La página se recargará.');
-                        location.reload();
-                    }
+        function initAytoTab() {
+            const buttons = document.querySelectorAll('#ayto-projects .ayto-project-btn');
+            const infos = document.querySelectorAll('#ayto-projects .ayto-project-info');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    buttons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    infos.forEach(info => info.classList.remove('active'));
+                    const id = this.getAttribute('data-project');
+                    const target = document.getElementById(id);
+                    if (target) target.classList.add('active');
                 });
-            }
+            });
         }
 
         function normalizeName(name) {
             const replacements = {
-                'Ã¡': 'á', 'Ã©': 'é', 'Ã­': 'í', 'Ã³': 'ó', 'Ãº': 'ú', 'Ãñ': 'ñ',
+                'Ã¡': 'á', 'Ã©': 'é', 'Ã­': 'í', 'Ã³': 'ó', 'Ãº': 'ú', 'Ã±': 'ñ',
                 'Ã': 'Á', 'Ã‰': 'É', 'Ã': 'Í', 'Ã“': 'Ó', 'Ãš': 'Ú', 'Ã‘': 'Ñ',
                 'Ã¼': 'ü', 'Ãœ': 'Ü', 'Ã§': 'ç', 'Ã‡': 'Ç',
                 'Â¿': '¿', 'Â¡': '¡', 'Â´': "'", 'Âª': 'ª', 'Âº': 'º',
@@ -907,36 +1571,6 @@
                 } catch (e) { console.warn('No se pudo decodificar con TextDecoder:', e); }
             }
             return normalized.trim();
-        }
-
-        function saveData() {
-            localStorage.setItem('programsAppData', JSON.stringify(appState));
-        }
-
-        function loadSavedData() {
-            const savedData = localStorage.getItem('programsAppData');
-            if (savedData) {
-                appState = JSON.parse(savedData);
-                if (appState.githubToken) {
-                    document.getElementById('github-token').value = appState.githubToken;
-                }
-                if (appState.selectedCourse) {
-                    document.getElementById('course-select').value = appState.selectedCourse;
-                    document.getElementById('course-subtitle').textContent = `Curso ${appState.selectedCourse}`;
-                } else {
-                    appState.selectedCourse = getCurrentCourse();
-                    document.getElementById('course-select').value = appState.selectedCourse;
-                    document.getElementById('course-subtitle').textContent = `Curso ${appState.selectedCourse}`;
-                }
-                if (appState.teachers && appState.teachers.length > 0) {
-                    updateTeacherSelectors();
-                }
-            } else {
-                appState.selectedCourse = getCurrentCourse();
-                document.getElementById('course-select').value = appState.selectedCourse;
-                document.getElementById('course-subtitle').textContent = `Curso ${appState.selectedCourse}`;
-                saveData();
-            }
         }
 
         function handleTeacherFile(event) {
@@ -1023,25 +1657,21 @@
             reader.onload = function(e) {
                 try {
                     const importedData = JSON.parse(e.target.result);
-                    appState = importedData;
+                    appState = {
+                        participation: importedData.participation || {},
+                        githubToken: importedData.githubToken || appState.githubToken,
+                        selectedCourse: importedData.selectedCourse || getCurrentCourse(),
+                        teachers: importedData.teachers || []
+                    };
                     saveData();
                     initPrograms();
-
-                    if (appState.githubToken) {
-                        document.getElementById('github-token').value = appState.githubToken;
-                    }
-                    if (appState.selectedCourse) {
-                        document.getElementById('course-select').value = appState.selectedCourse;
-                        document.getElementById('course-subtitle').textContent = `Curso ${appState.selectedCourse}`;
-                        const dossierCourseEl = document.getElementById('dossier-course');
-                        if (dossierCourseEl) dossierCourseEl.textContent = appState.selectedCourse;
-                        syncAytoCourse();
-                    }
-                    if (appState.teachers && appState.teachers.length > 0) {
-                        updateTeacherSelectors();
-                    }
-
-                    // Refresca etiquetas/botones tras la importación
+                    document.getElementById('course-select').value = appState.selectedCourse;
+                    document.getElementById('course-subtitle').textContent = `Curso ${appState.selectedCourse}`;
+                    const dossierCourseEl = document.getElementById('dossier-course');
+                    if (dossierCourseEl) dossierCourseEl.textContent = appState.selectedCourse;
+                    syncAytoCourse();
+                    if (appState.teachers.length > 0) updateTeacherSelectors();
+                    // Refrescar UI
                     for (const type in programsData) {
                         programsData[type].forEach(program => {
                             const participation = appState.participation[program.id];
@@ -1067,7 +1697,6 @@
                             }
                         });
                     }
-
                     alert('Datos importados correctamente.');
                 } catch (error) {
                     alert('Error al importar los datos. Verifique que el archivo es válido.');
@@ -1075,141 +1704,6 @@
             };
             reader.readAsText(file);
             event.target.value = '';
-        }
-
-        async function saveToGitHub() {
-            if (!appState.githubToken) {
-                alert('Por favor, introduzca un token de GitHub.');
-                return;
-            }
-            try {
-                const { githubToken, ...dataWithoutToken } = appState;
-                const dataStr = JSON.stringify(dataWithoutToken, null, 2);
-                const gistData = {
-                    description: 'Datos de Programas Educativos - Junta de Andalucía',
-                    public: false,
-                    files: { 'programas-educativos-datos.json': { content: dataStr } }
-                };
-                const response = await fetch('https://api.github.com/gists', {
-                    method: 'POST',
-                    headers: { 'Authorization': `token ${appState.githubToken}`, 'Content-Type': 'application/json' },
-                    body: JSON.stringify(gistData)
-                });
-                if (response.ok) {
-                    alert('Datos guardados correctamente en GitHub Gist.');
-                } else {
-                    const error = await response.json();
-                    alert(`Error al guardar en GitHub: ${error.message}`);
-                }
-            } catch (error) {
-                alert('Error de conexión al intentar guardar en GitHub.');
-            }
-        }
-
-        async function loadFromGitHub() {
-            if (!appState.githubToken) {
-                alert('Por favor, introduzca un token de GitHub.');
-                return;
-            }
-            try {
-                const response = await fetch('https://api.github.com/gists', {
-                    headers: { 'Authorization': `token ${appState.githubToken}` }
-                });
-                if (response.ok) {
-                    const gists = await response.json();
-                    displayGistList(gists);
-                } else {
-                    const error = await response.json();
-                    alert(`Error al cargar desde GitHub: ${error.message}`);
-                }
-            } catch (error) {
-                alert('Error de conexión al intentar cargar desde GitHub.');
-            }
-        }
-
-        function displayGistList(gists) {
-            const gistList = document.getElementById('gist-list');
-            gistList.innerHTML = '';
-            gistList.style.display = 'block';
-            const relevantGists = gists.filter(gist => gist.description && gist.description.includes('Programas Educativos'));
-            if (relevantGists.length === 0) {
-                gistList.innerHTML = '<div class="gist-item">No se encontraron Gists relevantes.</div>';
-                return;
-            }
-            relevantGists.forEach(gist => {
-                const gistItem = document.createElement('div');
-                gistItem.className = 'gist-item';
-                const date = new Date(gist.created_at).toLocaleDateString('es-ES');
-                gistItem.innerHTML = `<div>${gist.description}</div><div class="gist-date">${date}</div>`;
-                gistItem.addEventListener('click', async function() {
-                    await loadGistData(gist.id);
-                    gistList.style.display = 'none';
-                });
-                gistList.appendChild(gistItem);
-            });
-        }
-
-        async function loadGistData(gistId) {
-            try {
-                const response = await fetch(`https://api.github.com/gists/${gistId}`, {
-                    headers: { 'Authorization': `token ${appState.githubToken}` }
-                });
-                if (response.ok) {
-                    const gist = await response.json();
-                    const file = gist.files[Object.keys(gist.files)[0]];
-                    if (file) {
-                        const importedData = JSON.parse(file.content);
-                        const currentToken = appState.githubToken;
-                        appState = { ...importedData, githubToken: currentToken };
-                        saveData();
-                        initPrograms();
-
-                        if (appState.githubToken) document.getElementById('github-token').value = appState.githubToken;
-                        if (appState.selectedCourse) {
-                            document.getElementById('course-select').value = appState.selectedCourse;
-                            document.getElementById('course-subtitle').textContent = `Curso ${appState.selectedCourse}`;
-                            const dossierCourseEl = document.getElementById('dossier-course');
-                            if (dossierCourseEl) dossierCourseEl.textContent = appState.selectedCourse;
-                            syncAytoCourse();
-                        }
-                        if (appState.teachers && appState.teachers.length > 0) updateTeacherSelectors();
-
-                        // Sincroniza etiquetas y botones
-                        for (const type in programsData) {
-                            programsData[type].forEach(program => {
-                                const participation = appState.participation[program.id];
-                                const coordLabel = document.getElementById(`coord-${program.id}`);
-                                const coordinatorBtn = document.getElementById(`coordinator-${program.id}`);
-                                const checkbox = document.getElementById(`check-${program.id}`);
-                                if (coordLabel && coordinatorBtn && checkbox) {
-                                    const hasCoord = participation && participation.coordinator;
-                                    const participates = participation && participation.participates;
-                                    if (hasCoord) {
-                                        coordLabel.style.display = 'block';
-                                        const nameEl = coordLabel.querySelector('.coord-name');
-                                        if (nameEl) nameEl.textContent = participation.coordinator;
-                                        coordinatorBtn.innerHTML = '<i class="fas fa-user-edit"></i> Reasignar coordinación';
-                                        coordinatorBtn.classList.add('reassign');
-                                    } else {
-                                        coordLabel.style.display = 'none';
-                                        coordinatorBtn.innerHTML = '<i class="fas fa-user-edit"></i> Asignar coordinación';
-                                        coordinatorBtn.classList.remove('reassign');
-                                    }
-                                    coordinatorBtn.style.display = participates ? 'block' : 'none';
-                                    checkbox.checked = !!participates;
-                                }
-                            });
-                        }
-
-                        alert('Datos cargados correctamente desde GitHub Gist.');
-                    }
-                } else {
-                    const error = await response.json();
-                    alert(`Error al cargar el Gist: ${error.message}`);
-                }
-            } catch (error) {
-                alert('Error de conexión al intentar cargar el Gist.');
-            }
         }
 
         function generatePDF() {
@@ -1237,16 +1731,12 @@
                     doc.text(type, 14, y);
                     y += 10;
                     const headers = [['NOMBRE DEL PROGRAMA', 'COORDINACIÓN']];
-                    
-                    // Crear datos de tabla con enlaces
                     const tableData = reportData[type].map(item => {
-                        // Para PDF, crear un objeto con contenido y propiedades de enlace
                         return [
                             { content: item.program, link: item.url || null },
                             item.coordinator
                         ];
                     });
-                    
                     doc.autoTable({
                         startY: y,
                         head: headers,
@@ -1255,15 +1745,10 @@
                         headStyles: { fillColor: [0, 85, 164], textColor: 255, fontStyle: 'bold' },
                         styles: { fontSize: 10, cellPadding: 3 },
                         columnStyles: { 
-                            0: { 
-                                cellWidth: 'auto',
-                                textColor: [0, 85, 164],
-                                fontStyle: 'underline'
-                            }, 
+                            0: { cellWidth: 'auto', textColor: [0, 85, 164], fontStyle: 'underline' }, 
                             1: { cellWidth: 'auto' }
                         },
                         margin: { top: 10 },
-                        // Agregar enlaces a las celdas
                         didDrawCell: function(data) {
                             if (data.section === 'body' && data.column.index === 0 && data.cell.raw.link) {
                                 doc.link(data.cell.x, data.cell.y, data.cell.width, data.cell.height, { url: data.cell.raw.link });
@@ -1387,7 +1872,6 @@
         function getReportData() {
             const reportData = { 'Tipo A': [], 'Tipo B': [], 'Tipo C': [] };
             for (const type in programsData) {
-                if (type === 'ayto-projects') continue;
                 const typeName = type === 'type-a' ? 'Tipo A' : type === 'type-b' ? 'Tipo B' : 'Tipo C';
                 programsData[type].forEach(program => {
                     const participation = appState.participation[program.id];
@@ -1406,7 +1890,6 @@
         function validateCoordinatorAssignments() {
             const errors = [];
             for (const type in programsData) {
-                if (type === 'ayto-projects') continue;
                 programsData[type].forEach(program => {
                     const participation = appState.participation[program.id];
                     if (participation && participation.participates && !participation.coordinator) {
@@ -1417,36 +1900,44 @@
             return { isValid: errors.length === 0, errors: errors };
         }
 
-        function initAytoTab() {
-            const buttons = document.querySelectorAll('#ayto-projects .ayto-project-btn');
-            const infos = document.querySelectorAll('#ayto-projects .ayto-project-info');
-            buttons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    buttons.forEach(b => b.classList.remove('active'));
-                    this.classList.add('active');
-                    infos.forEach(info => info.classList.remove('active'));
-                    const id = this.getAttribute('data-project');
-                    const target = document.getElementById(id);
-                    if (target) target.classList.add('active');
-                });
-            });
+        function clearAllData() {
+            if (confirm('¿ESTÁ SEGURO DE QUE QUIERE ELIMINAR TODOS LOS DATOS?\n\nEsta acción eliminará:\n- Lista completa de profesorado\n- Datos de planes y proyectos\n- Toda la configuración\n\nEsta operación NO se puede deshacer.')) {
+                localStorage.removeItem('programsAppData');
+                localStorage.removeItem('githubToken');
+                location.reload();
+            }
         }
 
-        function syncAytoCourse() {
-            const aytoCourseEl = document.getElementById('ayto-course-subtitle');
-            const aytoFooterCourseEl = document.getElementById('ayto-footer-course');
-            const selected = appState.selectedCourse || getCurrentCourse();
-            if (aytoCourseEl) aytoCourseEl.textContent = selected.replace('-', '/');
-            if (aytoFooterCourseEl) aytoFooterCourseEl.textContent = selected.replace('-', '/');
-        }
+        // ================================================
+        // INICIALIZACIÓN
+        // ================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar datos guardados
+            loadSavedData();
+            
+            // Inicializar componentes de UI
+            initNavigation();
+            initPrograms();
+            initEvents();
+            initCollapsibles();   // <-- CLAVE: reactivar collapsibles
+            initAytoTab();
+
+            // Si hay token en localStorage, mostrarlo en el campo
+            if (localStorage.getItem('githubToken')) {
+                document.getElementById('github-token').value = localStorage.getItem('githubToken');
+            }
+
+            // Actualizar estado de autenticación y cargar automáticamente si hay token
+            if (appState.githubToken) {
+                setTimeout(async () => {
+                    await updateAuthStatusFromToken();
+                    await loadLatestFromGitHubAuto();
+                }, 100);
+            }
+
+            // Mostrar última actualización si existe
+            showLastUpdateIndicator();
+        });
     </script>
-	<script>
-	if ("serviceWorker" in navigator) {
-	  navigator.serviceWorker.register("./sw.js")
-		.then(reg => console.log("Service Worker registrado:", reg))
-		.catch(err => console.error("Error al registrar SW:", err));
-	}
-	</script>
-
 </body>
 </html>
