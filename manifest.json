@@ -1,6 +1,6 @@
 {
   "name": "Planes y Programas IES Virgen de Villadiego",
-  "short_name": "PlanesProgramas",
+  "short_name": "Planes y Programas",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
