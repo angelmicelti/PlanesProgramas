@@ -1,4 +1,4 @@
-const CACHE_NAME = "planes-programas-v3";
+const CACHE_NAME = "planes-programas-v4";
 const urlsToCache = [
   "./",
   "./index.html",
